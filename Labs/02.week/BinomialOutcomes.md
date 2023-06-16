@@ -35,40 +35,6 @@ Constanza F. Schibber
 - [11 Multinomial Logit](#11-multinomial-logit)
   - [11.1 `mlogit` package](#111-mlogit-package)
 
-*Table of Contents*
-
-- [1 Data: Voting Intentions in the 1988 Chilean
-  Plebiscite](#1-data-voting-intentions-in-the-1988-chilean-plebiscite)
-- [2 Fitting Logit Model](#2-fitting-logit-model)
-- [3 Likelihood Ratio Test](#3-likelihood-ratio-test)
-  - [3.1 Null v Specified Model](#31-null-v-specified-model)
-  - [3.2 Saturated v Specified Model](#32-saturated-v-specified-model)
-- [4 How well does our model predict the data? Error
-  rate](#4-how-well-does-our-model-predict-the-data-error-rate)
-- [5 Odds Ratio](#5-odds-ratio)
-  - [5.1 Odds Ratio for Status Quo
-    covariate](#51-odds-ratio-for-status-quo-covariate)
-  - [5.2 Odds Ratio, Sex](#52-odds-ratio-sex)
-  - [5.3 Odds ratio, Education](#53-odds-ratio-education)
-- [6 Predicted Probablities](#6-predicted-probablities)
-  - [6.1 Plotting predicted probabilities for different values of Status
-    Quo (low tech
-    version)](#61-plotting-predicted-probabilities-for-different-values-of-status-quo-low-tech-version)
-  - [6.2 Plotting predicted probabilities for different values of Status
-    Quo (Monte Carlo
-    simulation)](#62-plotting-predicted-probabilities-for-different-values-of-status-quo-monte-carlo-simulation)
-- [7 First Differences: Plotting predicted probabilities for men and
-  women, and first difference (Monte Carlo
-  simulation)](#7-first-differences-plotting-predicted-probabilities-for-men-and-women-and-first-difference-monte-carlo-simulation)
-- [8 Marginal Change in Probability (for Status
-  Quo)](#8-marginal-change-in-probability-for-status-quo)
-- [9 Marginal Change in Probability (for
-  Income)](#9-marginal-change-in-probability-for-income)
-- [10 Plotting using `curve` instead of
-  `lines`](#10-plotting-using-curve-instead-of-lines)
-- [11 Multinomial Logit](#11-multinomial-logit)
-  - [11.1 `mlogit` package](#111-mlogit-package)
-
 # 1 Data: Voting Intentions in the 1988 Chilean Plebiscite
 
 The Chile data frame has 2700 rows and 8 columns. The data are from a
@@ -664,12 +630,12 @@ head(sim.chile)
 ```
 
     ##      (Intercept) statusquo           age        income educationPS educationS
-    ## [1,]   0.7952199  3.137797 -0.0043091044 -5.105123e-06  -0.8338068 -0.2732975
-    ## [2,]   1.1408564  3.435716  0.0012640708 -6.353132e-06  -0.9789630 -0.4972710
-    ## [3,]   0.1838709  3.139835  0.0112894977 -1.914417e-06  -0.4715895 -0.3811792
-    ## [4,]   1.2515808  3.358456 -0.0107769787 -5.590791e-07  -0.8751723 -0.8693100
-    ## [5,]   0.6466517  3.111303  0.0004022192 -5.152286e-07  -0.7973025 -0.8913479
-    ## [6,]   1.0159525  3.418619 -0.0016748836 -5.028055e-06  -0.4651176 -0.7233492
+    ## [1,]  0.45214782  3.393646  0.0052415921 -3.709880e-06  -0.3904157 -0.3654135
+    ## [2,]  0.54473499  3.208671  0.0052188315 -1.793735e-06  -0.7469735 -0.9101792
+    ## [3,]  0.10004652  3.252981  0.0150275635 -6.807186e-06  -0.3609428 -0.5199001
+    ## [4,] -0.07788026  3.054221  0.0192974390  1.622644e-06  -1.4052312 -0.7467067
+    ## [5,]  1.25765874  3.361536 -0.0024751483 -9.717309e-06  -1.1338977 -0.7994142
+    ## [6,]  0.76200657  3.136154  0.0008194611  2.062474e-06  -1.0494116 -0.5537460
 
 ``` r
 summary(Chile.out)
@@ -717,19 +683,19 @@ summary(sim.chile)
 ```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.4160   Min.   :2.759   Min.   :-0.022143   Min.   :-1.100e-05  
-    ##  1st Qu.: 0.4464   1st Qu.:3.083   1st Qu.:-0.002781   1st Qu.:-4.214e-06  
-    ##  Median : 0.6911   Median :3.187   Median : 0.002300   Median :-2.306e-06  
-    ##  Mean   : 0.6957   Mean   :3.184   Mean   : 0.002272   Mean   :-2.356e-06  
-    ##  3rd Qu.: 0.9394   3rd Qu.:3.279   3rd Qu.: 0.007088   3rd Qu.:-3.992e-07  
-    ##  Max.   : 1.8148   Max.   :3.718   Max.   : 0.025066   Max.   : 6.815e-06  
+    ##  Min.   :-0.4441   Min.   :2.691   Min.   :-0.021533   Min.   :-1.168e-05  
+    ##  1st Qu.: 0.4594   1st Qu.:3.078   1st Qu.:-0.002803   1st Qu.:-4.225e-06  
+    ##  Median : 0.6963   Median :3.176   Median : 0.002572   Median :-2.414e-06  
+    ##  Mean   : 0.6902   Mean   :3.179   Mean   : 0.002432   Mean   :-2.368e-06  
+    ##  3rd Qu.: 0.9256   3rd Qu.:3.280   3rd Qu.: 0.007414   3rd Qu.:-4.968e-07  
+    ##  Max.   : 1.7647   Max.   :3.619   Max.   : 0.025715   Max.   : 5.675e-06  
     ##   educationPS        educationS      
-    ##  Min.   :-2.1410   Min.   :-1.49604  
-    ##  1st Qu.:-1.2656   1st Qu.:-0.83812  
-    ##  Median :-1.0235   Median :-0.67490  
-    ##  Mean   :-1.0367   Mean   :-0.67357  
-    ##  3rd Qu.:-0.8022   3rd Qu.:-0.52474  
-    ##  Max.   :-0.1035   Max.   :-0.01844
+    ##  Min.   :-2.1580   Min.   :-1.59149  
+    ##  1st Qu.:-1.2577   1st Qu.:-0.82949  
+    ##  Median :-1.0383   Median :-0.67129  
+    ##  Mean   :-1.0358   Mean   :-0.67307  
+    ##  3rd Qu.:-0.8126   3rd Qu.:-0.51282  
+    ##  Max.   :-0.0130   Max.   : 0.07379
 
 You can make a histogram of the simulated intercepts:
 
@@ -746,7 +712,7 @@ from the model output,
 sd(sim.chile[,1])
 ```
 
-    ## [1] 0.3563788
+    ## [1] 0.3581762
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
@@ -863,7 +829,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.1924872
+    ## [1] 0.1924325
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -928,7 +894,7 @@ marginal.change.income<-beta.income*(exp(-eta)/(1+exp(-eta))^2)
 mean(marginal.change.income) 
 ```
 
-    ## [1] -6.011696e-07
+    ## [1] -6.091185e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
@@ -986,7 +952,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.289199
+    ## [1] 0.2885747
 
 ``` r
 plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
