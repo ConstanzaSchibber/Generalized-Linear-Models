@@ -29,31 +29,35 @@ library(car)
     ## Loading required package: carData
 
 ``` r
-#help(Chile) # for more information on the dataset
-summary(Chile)
+# help(Chile) # for more information on the dataset
+library(stargazer)
 ```
 
-    ##  region     population     sex           age        education  
-    ##  C :600   Min.   :  3750   F:1379   Min.   :18.00   P   :1107  
-    ##  M :100   1st Qu.: 25000   M:1321   1st Qu.:26.00   PS  : 462  
-    ##  N :322   Median :175000            Median :36.00   S   :1120  
-    ##  S :718   Mean   :152222            Mean   :38.55   NA's:  11  
-    ##  SA:960   3rd Qu.:250000            3rd Qu.:49.00              
-    ##           Max.   :250000            Max.   :70.00              
-    ##                                     NA's   :1                  
-    ##      income         statusquo          vote    
-    ##  Min.   :  2500   Min.   :-1.80301   A   :187  
-    ##  1st Qu.:  7500   1st Qu.:-1.00223   N   :889  
-    ##  Median : 15000   Median :-0.04558   U   :588  
-    ##  Mean   : 33876   Mean   : 0.00000   Y   :868  
-    ##  3rd Qu.: 35000   3rd Qu.: 0.96857   NA's:168  
-    ##  Max.   :200000   Max.   : 2.04859             
-    ##  NA's   :98       NA's   :17
+    ## 
+    ## Please cite as:
+
+    ##  Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+
+    ##  R package version 5.2.3. https://CRAN.R-project.org/package=stargazer
 
 ``` r
-# Recode yes/no 
-# We recode "undecided" and "abstain" as NA
-Chile$yes <- with(Chile, ifelse(vote == "Y", 1, ifelse(vote=="N", 0, NA))) 
+stargazer(Chile, type = "text")
+```
+
+    ## 
+    ## =======================================================
+    ## Statistic    N      Mean      St. Dev.    Min     Max  
+    ## -------------------------------------------------------
+    ## population 2,700 152,222.200 102,198.000 3,750  250,000
+    ## age        2,699   38.549      14.756      18     70   
+    ## income     2,602 33,875.860  39,502.870  2,500  200,000
+    ## statusquo  2,683   -0.000       1.000    -1.803  2.049 
+    ## -------------------------------------------------------
+
+``` r
+# Recode yes/no We recode 'undecided' and 'abstain' as NA
+Chile$yes <- with(Chile, ifelse(vote == "Y", 1, ifelse(vote ==
+    "N", 0, NA)))
 table(Chile$vote)
 ```
 
@@ -76,42 +80,45 @@ handle missing values using multiple imputation.* Do not omit missing
 data in your own work!
 
 ``` r
-Chile<-na.omit(Chile)
+Chile <- na.omit(Chile)
 ```
 
 # Model, Logit
 
 ``` r
-Chile.out <- glm(yes ~ statusquo+age+income+sex, family=binomial(link=logit), data=Chile) 
-summary(Chile.out)
+Chile.out <- glm(yes ~ statusquo + age + income + sex, family = binomial(link = logit),
+    data = Chile)
+
+stargazer(Chile.out, type = "text")
 ```
 
     ## 
-    ## Call:
-    ## glm(formula = yes ~ statusquo + age + income + sex, family = binomial(link = logit), 
-    ##     data = Chile)
-    ## 
-    ## Deviance Residuals: 
-    ##     Min       1Q   Median       3Q      Max  
-    ## -3.3063  -0.2775  -0.1503   0.1960   2.9069  
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error z value Pr(>|z|)    
-    ## (Intercept)  4.356e-01  3.151e-01   1.383  0.16679    
-    ## statusquo    3.206e+00  1.470e-01  21.815  < 2e-16 ***
-    ## age          9.308e-03  6.908e-03   1.347  0.17785    
-    ## income      -6.200e-06  2.414e-06  -2.568  0.01023 *  
-    ## sexM        -6.186e-01  2.005e-01  -3.085  0.00204 ** 
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## (Dispersion parameter for binomial family taken to be 1)
-    ## 
-    ##     Null deviance: 2360.29  on 1702  degrees of freedom
-    ## Residual deviance:  717.47  on 1698  degrees of freedom
-    ## AIC: 727.47
-    ## 
-    ## Number of Fisher Scoring iterations: 6
+    ## =============================================
+    ##                       Dependent variable:    
+    ##                   ---------------------------
+    ##                               yes            
+    ## ---------------------------------------------
+    ## statusquo                  3.206***          
+    ##                             (0.147)          
+    ##                                              
+    ## age                          0.009           
+    ##                             (0.007)          
+    ##                                              
+    ## income                    -0.00001**         
+    ##                            (0.00000)         
+    ##                                              
+    ## sexM                       -0.619***         
+    ##                             (0.201)          
+    ##                                              
+    ## Constant                     0.436           
+    ##                             (0.315)          
+    ##                                              
+    ## ---------------------------------------------
+    ## Observations                 1,703           
+    ## Log Likelihood             -358.736          
+    ## Akaike Inf. Crit.           727.473          
+    ## =============================================
+    ## Note:             *p<0.1; **p<0.05; ***p<0.01
 
 # Using the `sim` function in the `arm` library
 
@@ -158,17 +165,19 @@ library(faraway)
 
 ``` r
 # new data for prediction
-sex.F<-cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0 ) #0 for female
-sex.M<-cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 1 ) # 1 for male
+sex.F <- cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),
+    mean(na.omit(Chile$income)), 0)  #0 for female
+sex.M <- cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),
+    mean(na.omit(Chile$income)), 1)  # 1 for male
 
 # sim
 
-sim.model<-coef(sim(Chile.out, 1000))
+sim.model <- coef(sim(Chile.out, 1000))
 
 # use sim
 
-predict.F<- ilogit(sex.F %*% t(sim.model))
-predict.M<- ilogit(sex.M %*% t(sim.model))
+predict.F <- ilogit(sex.F %*% t(sim.model))
+predict.M <- ilogit(sex.M %*% t(sim.model))
 ```
 
 We can now calculate first differences: P(vote\|M) - P(vote\|F)
@@ -176,17 +185,19 @@ We can now calculate first differences: P(vote\|M) - P(vote\|F)
 ``` r
 # first difference P(vote|M)-P(vote|F)
 
-first.difference<-predict.M-predict.F
+first.difference <- predict.M - predict.F
 
-FD.M.F<-quantile(first.difference, 0.5)
+FD.M.F <- quantile(first.difference, 0.5)
 
-CI.FD.M.F<-quantile(first.difference, probs=c(0.025, 0.975)) #For a 95% CI (CHECK THAT FOR SOME FIGURES I DID 90% CI. -- A 90% CI IS using quantile 0.05 and 0.95
+# For a 95% CI (CHECK THAT FOR SOME FIGURES I DID 90% CI
+# w/quantile 0.05 and 0.95
+CI.FD.M.F <- quantile(first.difference, probs = c(0.025, 0.975))
 
 (c(CI.FD.M.F[1], FD.M.F, CI.FD.M.F[2]))
 ```
 
     ##        2.5%         50%       97.5% 
-    ## -0.24198190 -0.15264426 -0.06040539
+    ## -0.24266928 -0.15607783 -0.06435134
 
 # First Differences: Sex & SQ
 
@@ -204,40 +215,47 @@ and the bounds for the confidence intervals.
 ``` r
 # Here I will show an example when status quo varies
 
-sq<-seq(min(Chile$statusquo),max(Chile$statusquo), length.out=100 )
+sq <- seq(min(Chile$statusquo), max(Chile$statusquo), length.out = 100)
 
-sex.F.sq<-cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0 ) #0 for female
-sex.M.sq<-cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 1 ) # 1 for male
+sex.F.sq <- cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)),
+    0)  #0 for female
+sex.M.sq <- cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)),
+    1)  # 1 for male
 
 # sim
 
-sim.model<-coef(sim(Chile.out, 1000))
+sim.model <- coef(sim(Chile.out, 1000))
 
 # use sim
 
-predict.F.sq<- ilogit(sex.F.sq %*% t(sim.model))
-predict.M.sq<- ilogit(sex.M.sq %*% t(sim.model))
+predict.F.sq <- ilogit(sex.F.sq %*% t(sim.model))
+predict.M.sq <- ilogit(sex.M.sq %*% t(sim.model))
 
 # first difference P(vote|F)-P(vote|M)
 
-first.difference<-predict.F.sq-predict.M.sq
+first.difference <- predict.F.sq - predict.M.sq
 
 
-par(mfrow=c(1,2))
-plot(NULL, xlab="Support for the Status Quo", ylab="P(Vote in favor of the military regime)",main = "Predicted Probabilities", ylim=c(-0.01,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+par(mfrow = c(1, 2))
+plot(NULL, xlab = "Support for the Status Quo", ylab = "P(Vote in favor of the military regime)",
+    main = "Predicted Probabilities", ylim = c(-0.01, 1), xlim = c(min(na.omit(Chile$statusquo)),
+        max(na.omit(Chile$statusquo))))
 lines(sq, apply(predict.F.sq, 1, quantile, 0.5), lwd = 3)
 lines(sq, apply(predict.F.sq, 1, quantile, 0.025), lty = 2)
 lines(sq, apply(predict.F.sq, 1, quantile, 0.97), lty = 2)
-lines(sq, apply(predict.M.sq, 1, quantile, 0.5), lwd = 3, col='blue')
-lines(sq, apply(predict.M.sq, 1, quantile, 0.025), lty = 2, col='blue')
-lines(sq, apply(predict.M.sq, 1, quantile, 0.97), lty = 2, col='blue')
-legend("bottomright", legend=c("Female", "Male"), col=c("black", "blue"), lty=c(1,1), cex=.5)
+lines(sq, apply(predict.M.sq, 1, quantile, 0.5), lwd = 3, col = "blue")
+lines(sq, apply(predict.M.sq, 1, quantile, 0.025), lty = 2, col = "blue")
+lines(sq, apply(predict.M.sq, 1, quantile, 0.97), lty = 2, col = "blue")
+legend("bottomright", legend = c("Female", "Male"), col = c("black",
+    "blue"), lty = c(1, 1), cex = 0.5)
 
-plot(NULL, xlab="Support for the Status Quo", ylab="P(Vote|Female)-P(Vote|Male)",main="First Differences", ylim=c(-0.01,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+plot(NULL, xlab = "Support for the Status Quo", ylab = "P(Vote|Female)-P(Vote|Male)",
+    main = "First Differences", ylim = c(-0.01, 1), xlim = c(min(na.omit(Chile$statusquo)),
+        max(na.omit(Chile$statusquo))))
 lines(sq, apply(first.difference, 1, quantile, 0.5), lwd = 3)
 lines(sq, apply(first.difference, 1, quantile, 0.025), lty = 2)
 lines(sq, apply(first.difference, 1, quantile, 0.97), lty = 2)
-abline(h=0, lty=3)
+abline(h = 0, lty = 3)
 ```
 
 ![](FirstDifferencesMCSimulation_files/figure-gfm/first%20differences%201-1.png)<!-- -->
@@ -264,45 +282,55 @@ income and sex.
 ``` r
 # Here I will show an example when status quo varies
 
-income<-seq(min(Chile$income),max(Chile$income), length.out=100 )
+income <- seq(min(Chile$income), max(Chile$income), length.out = 100)
 
-sex.F.income<-cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)), income, 0 ) #0 for female
-sex.M.income<-cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)), income, 1 ) # 1 for male
+sex.F.income <- cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),
+    income, 0)  #0 for female
+sex.M.income <- cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),
+    income, 1)  # 1 for male
 
 # sim
 
-sim.model<-coef(sim(Chile.out, 1000))
+sim.model <- coef(sim(Chile.out, 1000))
 
 # use sim
 
-predict.F.income<- ilogit(sex.F.income %*% t(sim.model))
-predict.M.income<- ilogit(sex.M.income %*% t(sim.model))
+predict.F.income <- ilogit(sex.F.income %*% t(sim.model))
+predict.M.income <- ilogit(sex.M.income %*% t(sim.model))
 
 # first difference P(vote|F)-P(vote|M)
 
-first.difference<-predict.F.income-predict.M.income
+first.difference <- predict.F.income - predict.M.income
 
 
-par(mfrow=c(1,2))
-plot(NULL, xlab="Income", ylab="P(Vote in favor of the military regime)",main = "Predicted Probabilities", ylim=c(-0.01,1), xlim=c(min(na.omit(Chile$income)),max(na.omit(Chile$income))))
+par(mfrow = c(1, 2))
+plot(NULL, xlab = "Income", ylab = "P(Vote in favor of the military regime)",
+    main = "Predicted Probabilities", ylim = c(-0.01, 1), xlim = c(min(na.omit(Chile$income)),
+        max(na.omit(Chile$income))))
 lines(income, apply(predict.F.income, 1, quantile, 0.5), lwd = 3)
 lines(income, apply(predict.F.income, 1, quantile, 0.025), lty = 2)
 lines(income, apply(predict.F.income, 1, quantile, 0.97), lty = 2)
-lines(income, apply(predict.M.income, 1, quantile, 0.5), lwd = 3, col='blue')
-lines(income, apply(predict.M.income, 1, quantile, 0.025), lty = 2, col='blue')
-lines(income, apply(predict.M.income, 1, quantile, 0.97), lty = 2, col='blue')
-legend("bottomright", legend=c("Female", "Male"), col=c("black", "blue"), lty=c(1,1), cex=.5)
+lines(income, apply(predict.M.income, 1, quantile, 0.5), lwd = 3,
+    col = "blue")
+lines(income, apply(predict.M.income, 1, quantile, 0.025), lty = 2,
+    col = "blue")
+lines(income, apply(predict.M.income, 1, quantile, 0.97), lty = 2,
+    col = "blue")
+legend("bottomright", legend = c("Female", "Male"), col = c("black",
+    "blue"), lty = c(1, 1), cex = 0.5)
 
-plot(NULL, xlab="Income", ylab="P(Vote|Female)-P(Vote|Male)",main="First Differences", ylim=c(-0.01,1), xlim=c(min(na.omit(Chile$income)),max(na.omit(Chile$income))))
+plot(NULL, xlab = "Income", ylab = "P(Vote|Female)-P(Vote|Male)",
+    main = "First Differences", ylim = c(-0.01, 1), xlim = c(min(na.omit(Chile$income)),
+        max(na.omit(Chile$income))))
 lines(income, apply(first.difference, 1, quantile, 0.5), lwd = 3)
 lines(income, apply(first.difference, 1, quantile, 0.025), lty = 2)
 lines(income, apply(first.difference, 1, quantile, 0.97), lty = 2)
-abline(h=0, lty=3)
+abline(h = 0, lty = 3)
 ```
 
 ![](FirstDifferencesMCSimulation_files/figure-gfm/first%20differences%202-1.png)<!-- -->
 
-Discussion:
+**Discussion:**
 
 - Do we observe a difference between the vote choice of women and men?
 - Do we observe a difference between the voice choice of women and men
