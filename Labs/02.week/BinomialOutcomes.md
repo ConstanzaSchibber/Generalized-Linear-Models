@@ -5,21 +5,17 @@ Constanza F. Schibber
 
 *Agenda*
 
-- [Data](#%20Data:%20Voting%20Intentions%20in%20the%201988%20Chilean%20Plebiscite)
-- [Fitting a Logistic Regression](#%20Fitting%20Logit%20Model)
-- [Likelihood Ratio Test](#%20Likelihood%20Ratio%20Test)
-- [Error Rate](#%20Error%20Rate)
-- [Odds Ratio](#%20Odds%20Ratio)
-- [Predicted Probabilities](#%20Predicted%20Probabilities)
-- [Predicted Probabilities & Monte Carlo
-  Simulation](##%20Plotting%20predicted%20probabilities%20for%20different%20values%20of%20Status%20Quo%20(Monte%20Carlo%20simulation))
-- [First
-  Differences](#%20First%20Differences:%20Plotting%20predicted%20probabilities%20for%20men%20and%20women,%20and%20first%20difference%20(Monte%20Carlo%20simulation))
-- [Marginal Change in
-  Probability](#%20Marginal%20Change%20in%20Probability%20(for%20Status%20Quo))
-- [Another way of
-  Plotting](#%20Plotting%20using%20%60curve%60%20instead%20of%20%60lines%60)
-- [Intro to Multinomial Logit](#%20Multinomial%20Logit)
+- Data
+- Fitting a Logistic Regression
+- Likelihood Ratio Test
+- Error Rate
+- Odds Ratio
+- Predicted Probabilities
+- Predicted Probabilities & Monte Carlo Simulation
+- First Differences
+- Marginal Change in Predicted Probabilities
+- Another way of Plotting
+- Intro to Multinomial Logit
 
 # Data: Voting Intentions in the 1988 Chilean Plebiscite
 
@@ -633,13 +629,13 @@ sim.chile <- coef(sim(Chile.out, n = 1000))
 head(sim.chile)
 ```
 
-    ##      (Intercept) statusquo          age        income educationPS educationS
-    ## [1,]   0.2510149  3.290296  0.013256538 -1.794559e-06  -1.2744957 -0.5189720
-    ## [2,]   0.3018050  3.254357  0.008864209 -2.134504e-07  -1.1993460 -0.4565768
-    ## [3,]   0.3978078  3.362927  0.009046104 -1.433457e-06  -0.8568303 -0.5099096
-    ## [4,]   0.8445685  2.951192 -0.001729131 -1.753010e-06  -0.5977985 -0.9813187
-    ## [5,]   1.1880738  3.291774 -0.008424630 -4.431839e-06  -1.1481224 -0.6831632
-    ## [6,]   0.3051650  3.172295  0.013231423 -3.680879e-06  -1.1117352 -0.5580325
+    ##      (Intercept) statusquo           age        income educationPS educationS
+    ## [1,]   0.1624884  3.401712  1.782367e-02  2.159984e-06  -0.9828629 -0.6044663
+    ## [2,]   0.5173329  3.121486  2.355697e-03 -1.097049e-06  -0.5105372 -0.3528451
+    ## [3,]   0.8152295  3.406921  1.708491e-03 -2.844143e-06  -0.6673918 -0.7115237
+    ## [4,]   0.5876663  3.240953  3.297572e-03 -3.959528e-06  -0.6271644 -0.6839030
+    ## [5,]   0.6003447  3.191400 -3.644491e-05 -5.892218e-06  -0.1716141 -0.2883490
+    ## [6,]   1.2629252  3.187632 -1.092149e-02 -9.303902e-06  -0.9285650 -0.4195394
 
 ``` r
 summary(Chile.out)
@@ -687,19 +683,19 @@ summary(sim.chile)
 ```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.6527   Min.   :2.744   Min.   :-0.022819   Min.   :-1.150e-05  
-    ##  1st Qu.: 0.4613   1st Qu.:3.099   1st Qu.:-0.002431   1st Qu.:-4.446e-06  
-    ##  Median : 0.6868   Median :3.192   Median : 0.002343   Median :-2.680e-06  
-    ##  Mean   : 0.6987   Mean   :3.185   Mean   : 0.002371   Mean   :-2.594e-06  
-    ##  3rd Qu.: 0.9440   3rd Qu.:3.275   3rd Qu.: 0.007078   3rd Qu.:-7.639e-07  
-    ##  Max.   : 1.9129   Max.   :3.645   Max.   : 0.025201   Max.   : 6.069e-06  
-    ##   educationPS        educationS      
-    ##  Min.   :-2.2396   Min.   :-1.54377  
-    ##  1st Qu.:-1.2636   1st Qu.:-0.82922  
-    ##  Median :-1.0270   Median :-0.66301  
-    ##  Mean   :-1.0222   Mean   :-0.66748  
-    ##  3rd Qu.:-0.7842   3rd Qu.:-0.49992  
-    ##  Max.   : 0.0339   Max.   : 0.02382
+    ##  Min.   :-0.3520   Min.   :2.723   Min.   :-0.022517   Min.   :-1.053e-05  
+    ##  1st Qu.: 0.4430   1st Qu.:3.083   1st Qu.:-0.002059   1st Qu.:-4.385e-06  
+    ##  Median : 0.6720   Median :3.182   Median : 0.002449   Median :-2.455e-06  
+    ##  Mean   : 0.6832   Mean   :3.186   Mean   : 0.002505   Mean   :-2.367e-06  
+    ##  3rd Qu.: 0.9181   3rd Qu.:3.285   3rd Qu.: 0.007638   3rd Qu.:-5.105e-07  
+    ##  Max.   : 1.9022   Max.   :3.718   Max.   : 0.026414   Max.   : 8.018e-06  
+    ##   educationPS         educationS     
+    ##  Min.   :-2.03920   Min.   :-1.3506  
+    ##  1st Qu.:-1.24598   1st Qu.:-0.8242  
+    ##  Median :-0.98646   Median :-0.6770  
+    ##  Mean   :-1.00709   Mean   :-0.6674  
+    ##  3rd Qu.:-0.77808   3rd Qu.:-0.5019  
+    ##  Max.   :-0.01002   Max.   : 0.1569
 
 You can make a histogram of the simulated intercepts:
 
@@ -716,7 +712,7 @@ from the model output,
 sd(sim.chile[, 1])
 ```
 
-    ## [1] 0.3554484
+    ## [1] 0.3564057
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
@@ -847,7 +843,7 @@ Marginal.change <- beta.sq * dlogis(x.sq.1 %*% t(sim.chile))
 mean(Marginal.change)
 ```
 
-    ## [1] 0.1924606
+    ## [1] 0.192343
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -915,7 +911,7 @@ marginal.change.income <- beta.income * (exp(-eta)/(1 + exp(-eta))^2)
 mean(marginal.change.income)
 ```
 
-    ## [1] -5.957207e-07
+    ## [1] -6.05549e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
@@ -978,7 +974,7 @@ Marginal.change <- beta.sq * dlogis(x.sq.1 %*% t(sim.chile))
 mean(Marginal.change)
 ```
 
-    ## [1] 0.2881672
+    ## [1] 0.2884566
 
 ``` r
 plot(NULL, xlab = "Support for the Status Quo", ylab = "Marginal Change in P(Vote in Support of the Military Regime)",
