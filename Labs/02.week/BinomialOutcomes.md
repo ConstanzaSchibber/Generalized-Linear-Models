@@ -1,36 +1,75 @@
--   [Data: Voting Intentions in the 1988 Chilean
-    Plebiscite](#data-voting-intentions-in-the-1988-chilean-plebiscite)
--   [Fitting Logit Model](#fitting-logit-model)
--   [Likelihood Ratio Test](#likelihood-ratio-test)
-    -   [Null v Specified Model](#null-v-specified-model)
-    -   [Saturated v Specified Model](#saturated-v-specified-model)
--   [How well does our model predict the data? Error
-    rate](#how-well-does-our-model-predict-the-data-error-rate)
--   [Odds Ratio](#odds-ratio)
-    -   [Odds Ratio for Status Quo
-        covariate](#odds-ratio-for-status-quo-covariate)
-    -   [Odds Ratio, Sex](#odds-ratio-sex)
-    -   [Odds ratio, Education](#odds-ratio-education)
--   [Predicted Probablities](#predicted-probablities)
-    -   [Plotting predicted probabilities for different values of Status
-        Quo (low tech
-        version)](#plotting-predicted-probabilities-for-different-values-of-status-quo-low-tech-version)
-    -   [Plotting predicted probabilities for different values of Status
-        Quo (Monte Carlo
-        simulation)](#plotting-predicted-probabilities-for-different-values-of-status-quo-monte-carlo-simulation)
--   [First Differences: Plotting predicted probabilities for men and
-    women, and first difference (Monte Carlo
-    simulation)](#first-differences-plotting-predicted-probabilities-for-men-and-women-and-first-difference-monte-carlo-simulation)
--   [Marginal Change in Probability (for Status
-    Quo)](#marginal-change-in-probability-for-status-quo)
--   [Marginal Change in Probability (for
-    Income)](#marginal-change-in-probability-for-income)
--   [Plotting using `curve` instead of
-    `lines`](#plotting-using-curve-instead-of-lines)
--   [Multinomial Logit](#multinomial-logit)
-    -   [`mlogit` package](#mlogit-package)
+Binomial Outcomes
+================
+Constanza F. Schibber
+2017-03-07
 
-# Data: Voting Intentions in the 1988 Chilean Plebiscite
+- [1 Data: Voting Intentions in the 1988 Chilean
+  Plebiscite](#1-data-voting-intentions-in-the-1988-chilean-plebiscite)
+- [2 Fitting Logit Model](#2-fitting-logit-model)
+- [3 Likelihood Ratio Test](#3-likelihood-ratio-test)
+  - [3.1 Null v Specified Model](#31-null-v-specified-model)
+  - [3.2 Saturated v Specified Model](#32-saturated-v-specified-model)
+- [4 How well does our model predict the data? Error
+  rate](#4-how-well-does-our-model-predict-the-data-error-rate)
+- [5 Odds Ratio](#5-odds-ratio)
+  - [5.1 Odds Ratio for Status Quo
+    covariate](#51-odds-ratio-for-status-quo-covariate)
+  - [5.2 Odds Ratio, Sex](#52-odds-ratio-sex)
+  - [5.3 Odds ratio, Education](#53-odds-ratio-education)
+- [6 Predicted Probablities](#6-predicted-probablities)
+  - [6.1 Plotting predicted probabilities for different values of Status
+    Quo (low tech
+    version)](#61-plotting-predicted-probabilities-for-different-values-of-status-quo-low-tech-version)
+  - [6.2 Plotting predicted probabilities for different values of Status
+    Quo (Monte Carlo
+    simulation)](#62-plotting-predicted-probabilities-for-different-values-of-status-quo-monte-carlo-simulation)
+- [7 First Differences: Plotting predicted probabilities for men and
+  women, and first difference (Monte Carlo
+  simulation)](#7-first-differences-plotting-predicted-probabilities-for-men-and-women-and-first-difference-monte-carlo-simulation)
+- [8 Marginal Change in Probability (for Status
+  Quo)](#8-marginal-change-in-probability-for-status-quo)
+- [9 Marginal Change in Probability (for
+  Income)](#9-marginal-change-in-probability-for-income)
+- [10 Plotting using `curve` instead of
+  `lines`](#10-plotting-using-curve-instead-of-lines)
+- [11 Multinomial Logit](#11-multinomial-logit)
+  - [11.1 `mlogit` package](#111-mlogit-package)
+
+*Table of Contents*
+
+- [1 Data: Voting Intentions in the 1988 Chilean
+  Plebiscite](#1-data-voting-intentions-in-the-1988-chilean-plebiscite)
+- [2 Fitting Logit Model](#2-fitting-logit-model)
+- [3 Likelihood Ratio Test](#3-likelihood-ratio-test)
+  - [3.1 Null v Specified Model](#31-null-v-specified-model)
+  - [3.2 Saturated v Specified Model](#32-saturated-v-specified-model)
+- [4 How well does our model predict the data? Error
+  rate](#4-how-well-does-our-model-predict-the-data-error-rate)
+- [5 Odds Ratio](#5-odds-ratio)
+  - [5.1 Odds Ratio for Status Quo
+    covariate](#51-odds-ratio-for-status-quo-covariate)
+  - [5.2 Odds Ratio, Sex](#52-odds-ratio-sex)
+  - [5.3 Odds ratio, Education](#53-odds-ratio-education)
+- [6 Predicted Probablities](#6-predicted-probablities)
+  - [6.1 Plotting predicted probabilities for different values of Status
+    Quo (low tech
+    version)](#61-plotting-predicted-probabilities-for-different-values-of-status-quo-low-tech-version)
+  - [6.2 Plotting predicted probabilities for different values of Status
+    Quo (Monte Carlo
+    simulation)](#62-plotting-predicted-probabilities-for-different-values-of-status-quo-monte-carlo-simulation)
+- [7 First Differences: Plotting predicted probabilities for men and
+  women, and first difference (Monte Carlo
+  simulation)](#7-first-differences-plotting-predicted-probabilities-for-men-and-women-and-first-difference-monte-carlo-simulation)
+- [8 Marginal Change in Probability (for Status
+  Quo)](#8-marginal-change-in-probability-for-status-quo)
+- [9 Marginal Change in Probability (for
+  Income)](#9-marginal-change-in-probability-for-income)
+- [10 Plotting using `curve` instead of
+  `lines`](#10-plotting-using-curve-instead-of-lines)
+- [11 Multinomial Logit](#11-multinomial-logit)
+  - [11.1 `mlogit` package](#111-mlogit-package)
+
+# 1 Data: Voting Intentions in the 1988 Chilean Plebiscite
 
 The Chile data frame has 2700 rows and 8 columns. The data are from a
 national survey conducted in April and May of 1988 by FLACSO/Chile.
@@ -42,12 +81,16 @@ plebiscite/referendum. In this referendum, all citizens would vote on
 whether Chile would continue as a military regime or it would transition
 to open and free elections towards democracy.
 
-    library(car)
+``` r
+library(car)
+```
 
     ## Loading required package: carData
 
-    # help(Chile) # for more information on the dataset
-    summary(Chile)
+``` r
+#help(Chile) # for more information on the dataset
+summary(Chile)
+```
 
     ##  region     population     sex           age        education  
     ##  C :600   Min.   :  3750   F:1379   Min.   :18.00   P   :1107  
@@ -66,16 +109,20 @@ to open and free elections towards democracy.
     ##  Max.   :200000   Max.   : 2.04859             
     ##  NA's   :98       NA's   :17
 
-    # Recode yes/no We recode 'undecided' and 'abstain' as NA
-    Chile$yes <- with(Chile, ifelse(vote == "Y", 1, ifelse(vote ==
-        "N", 0, NA)))
-    table(Chile$vote)
+``` r
+# Recode yes/no 
+# We recode "undecided" and "abstain" as NA
+Chile$yes <- with(Chile, ifelse(vote == "Y", 1, ifelse(vote=="N", 0, NA))) 
+table(Chile$vote)
+```
 
     ## 
     ##   A   N   U   Y 
     ## 187 889 588 868
 
-    table(Chile$yes)
+``` r
+table(Chile$yes)
+```
 
     ## 
     ##   0   1 
@@ -87,9 +134,11 @@ data and it can cause problems. *We will cover in a few weeks how to
 handle missing values using multiple imputation.* Do not omit missing
 data in your own work!
 
-    Chile <- na.omit(Chile)
+``` r
+Chile<-na.omit(Chile)
+```
 
-# Fitting Logit Model
+# 2 Fitting Logit Model
 
 The outcome variable is `vote`. Yes, which is code 1, means voting in
 favor of the authoritarian regime (Pinochet) and no, coded 0, voting
@@ -97,18 +146,17 @@ against the authoritarian regime.
 
 The covariates:
 
--   status quo: Scale of support for the status-quo.
--   age in years.
--   income: Monthly income, in Pesos.
--   education: A factor with levels (note: out of order): P, Primary;
-    PS, Post-secondary; S, Secondary.
+- status quo: Scale of support for the status-quo.
+- age in years.
+- income: Monthly income, in Pesos.
+- education: A factor with levels (note: out of order): P, Primary; PS,
+  Post-secondary; S, Secondary.
 
-<!-- -->
+``` r
+Chile.out <- glm(yes ~ statusquo+age+income+education, family=binomial(link=logit), data=Chile) 
 
-    Chile.out <- glm(yes ~ statusquo + age + income + education,
-        family = binomial(link = logit), data = Chile)
-
-    summary(Chile.out)
+summary(Chile.out)
+```
 
     ## 
     ## Call:
@@ -140,12 +188,14 @@ The covariates:
 
 In another model below, I add sex (code F for female, M for male).
 
-# Likelihood Ratio Test
+# 3 Likelihood Ratio Test
 
-## Null v Specified Model
+## 3.1 Null v Specified Model
 
-    ### Null vs. Specified
-    pchisq(2360.29 - 715.58, df = 1702 - 1697, lower = FALSE)
+``` r
+### Null vs. Specified 
+pchisq(2360.29-715.58, df=1702-1697,lower=FALSE)
+```
 
     ## [1] 0
 
@@ -154,9 +204,11 @@ of freedom, so the mean model is statistically far from the specified
 model. Thus, we can reject the null hypothesis stating that the mean
 model provides as good a fit for the data as the specified model.
 
-## Saturated v Specified Model
+## 3.2 Saturated v Specified Model
 
-    pchisq(deviance(Chile.out), df.residual(Chile.out), lower = FALSE)
+``` r
+pchisq(deviance(Chile.out),df.residual(Chile.out),lower=FALSE)
+```
 
     ## [1] 1
 
@@ -166,12 +218,14 @@ model. Thus, we cannot reject the null hypothesis stating that the
 saturated model provides as good a fit for the data as the specified
 model.
 
-# How well does our model predict the data? Error rate
+# 4 How well does our model predict the data? Error rate
 
-    Chile.pred <- Chile.out$fitted.values
-    Chile.pred[Chile.pred < 0.5] <- 0
-    Chile.pred[Chile.pred > 0.5] <- 1
-    table(Chile$yes, Chile.pred)
+``` r
+Chile.pred <- Chile.out$fitted.values
+Chile.pred[Chile.pred < 0.5] <- 0
+Chile.pred[Chile.pred > 0.5] <- 1
+table(Chile$yes, Chile.pred)
+```
 
     ##    Chile.pred
     ##       0   1
@@ -188,35 +242,41 @@ predicts 8.1% (68) of them.
 
 The error rate for the specified model is,
 
-    error.rate <- mean((Chile.out$fitted.values > 0.5 & Chile$yes ==
-        0) | (Chile.out$fitted.values < 0.5 & Chile$yes == 1))
-    error.rate
+``` r
+error.rate <- mean ((Chile.out$fitted.values>0.5 & Chile$yes==0) | (Chile.out$fitted.values<.5 & Chile$yes==1))
+error.rate
+```
 
     ## [1] 0.07398708
 
 The error rate for a mean model (also called null model) is,
 
-    Chile.mean <- glm(yes ~ 1, family = binomial(link = logit), data = Chile)
-    # summary(Chile.out)
-    Chile.pred.mean <- Chile.mean$fitted.values
-    Chile.pred.mean[Chile.pred.mean < 0.5] <- 0
-    Chile.pred.mean[Chile.pred.mean > 0.5] <- 1
-    table(Chile.pred.mean, Chile$yes)
+``` r
+Chile.mean <- glm(yes ~ 1, family=binomial(link=logit), data=Chile) 
+#summary(Chile.out)
+Chile.pred.mean <- Chile.mean$fitted.values
+Chile.pred.mean[Chile.pred.mean < 0.5] <- 0
+Chile.pred.mean[Chile.pred.mean > 0.5] <- 1
+table(Chile.pred.mean,Chile$yes)
+```
 
     ##                
     ## Chile.pred.mean   0   1
     ##               0 867 836
 
-    error.rate.mean <- mean((Chile.mean$fitted.values > 0.5 & Chile$yes ==
-        0) | (Chile.mean$fitted.values < 0.5 & Chile$yes == 1))
-    error.rate.mean
+``` r
+error.rate.mean <- mean ((Chile.mean$fitted.values>0.5 & Chile$yes==0) | (Chile.mean$fitted.values<.5 & Chile$yes==1))
+error.rate.mean
+```
 
     ## [1] 0.4908984
 
 Which actually is the same as the mean of the outcome variable, so
 basically there is no need to fit a model with just the intercept.
 
-    mean(Chile$yes)
+``` r
+mean(Chile$yes)
+```
 
     ## [1] 0.4908984
 
@@ -227,19 +287,22 @@ the error rate for the mean model, which is 0.491. By adding the
 covariates, the specified model does a better job at predicting
 respondents’ vote choice.
 
-# Odds Ratio
+# 5 Odds Ratio
 
-## Odds Ratio for Status Quo covariate
+## 5.1 Odds Ratio for Status Quo covariate
 
-    # This gives you the second coefficient in the regression,
-    # status quo
-    coef(Chile.out)[2]
+``` r
+#This gives you the second coefficient in the regression, status quo
+coef(Chile.out)[2]
+```
 
     ## statusquo 
     ##  3.186245
 
-    # Odds ratio
-    exp(coef(Chile.out)[2])
+``` r
+# Odds ratio
+exp(coef(Chile.out)[2])
+```
 
     ## statusquo 
     ##  24.19741
@@ -247,17 +310,19 @@ respondents’ vote choice.
 After controlling for other variables, for a one-unit change in “support
 of the status quo” the odds of voting in favor of the military regime v.
 not voting in support of the military regime are, on average,
-exp(coef(Chile.out)\[2\])=24.19 times larger.
+exp(coef(Chile.out)$$2$$)=24.19 times larger.
 
 When the probability of success (1=vote in favor) is less than the
 probability of failure (0=vote against), the odds will be less than 1.
 When the probability of success (1=vote in favor) is greater than the
-probability of failure, the odds &gt; 1. If the odds are exactly 1, then
+probability of failure, the odds \> 1. If the odds are exactly 1, then
 the odds of success and failure are even.
 
 The confidence interval for the odds ratio is,
 
-    confint(Chile.out)
+``` r
+confint(Chile.out)
+```
 
     ## Waiting for profiling to be done...
 
@@ -269,21 +334,25 @@ The confidence interval for the odds ratio is,
     ## educationPS -1.707832e+00 -3.669337e-01
     ## educationS  -1.142213e+00 -2.019137e-01
 
-## Odds Ratio, Sex
+## 5.2 Odds Ratio, Sex
 
 **Exercise:** Calculate the odds ratio for sex and provide an
 interpretation
 
-## Odds ratio, Education
+## 5.3 Odds ratio, Education
 
 The baseline category is: respondent has “primary” education.
 
-    summary(Chile$education)
+``` r
+summary(Chile$education)
+```
 
     ##   P  PS   S 
     ## 671 343 689
 
-    summary(Chile.out)
+``` r
+summary(Chile.out)
+```
 
     ## 
     ## Call:
@@ -316,7 +385,9 @@ The baseline category is: respondent has “primary” education.
 Odds-ratio of a respondent supporting the military regime if she has
 *primary education* is,
 
-    exp(coef(Chile.out)[1])
+``` r
+exp(coef(Chile.out)[1])
+```
 
     ## (Intercept) 
     ##    2.015537
@@ -324,7 +395,9 @@ Odds-ratio of a respondent supporting the military regime if she has
 Odds-ratio of a respondent supporting the military regime if she has
 *secondary education* in comparison to primary education is,
 
-    exp(coef(Chile.out)["educationS"])
+``` r
+exp(coef(Chile.out)['educationS'])
+```
 
     ## educationS 
     ##   0.511917
@@ -332,14 +405,18 @@ Odds-ratio of a respondent supporting the military regime if she has
 Odds-ratio of a respondent supporting the military regime if she has
 *post-secondary education* in comparison to primary education is,
 
-    exp(coef(Chile.out)["educationPS"])
+``` r
+exp(coef(Chile.out)['educationPS']) 
+```
 
     ## educationPS 
     ##   0.3577184
 
 Or we can calculate in %:
 
-    100 * (exp(coef(Chile.out)["educationPS"]) - 1)
+``` r
+100*(exp(coef(Chile.out)['educationPS'])-1)
+```
 
     ## educationPS 
     ##   -64.22816
@@ -353,7 +430,9 @@ by doing exp(beta post secondary)/exp(beta secondary). We have to do
 this calculation because we do not want to compare to the baseline
 category.
 
-    exp(coef(Chile.out)["educationPS"])/exp(coef(Chile.out)["educationS"])
+``` r
+exp(coef(Chile.out)['educationPS'])/exp(coef(Chile.out)['educationS'])
+```
 
     ## educationPS 
     ##    0.698782
@@ -365,8 +444,9 @@ of the military regime.
 
 We get a percentage,
 
-    100 * ((exp(coef(Chile.out)["educationPS"])/exp(coef(Chile.out)["educationS"])) -
-        1)
+``` r
+100*((exp(coef(Chile.out)['educationPS'])/exp(coef(Chile.out)['educationS']))-1)
+```
 
     ## educationPS 
     ##    -30.1218
@@ -375,7 +455,7 @@ INTERPRETATION: The odds of voting in favor of the military regime are
 30.12% **smaller** for a respondent with post-secondary education than
 for a respondent with secondary education.
 
-# Predicted Probablities
+# 6 Predicted Probablities
 
 There are different ways of calculating predicted probabilities. In the
 next few weeks, we will learn how to use Monte Carlo simulations and the
@@ -389,13 +469,13 @@ variable. This is a conservative approach in comparison to taking the
 minimum and maximum values of the variable for which you are the most
 likely to see different predicted probabilities.
 
-    # Predict for lower support for SQ
-    data.frame.Chile.LowSQ <- data.frame(statusquo = -1.097, age = mean(Chile$age),
-        income = mean(Chile$income), education = "S")
+``` r
+# Predict for lower support for SQ
+data.frame.Chile.LowSQ<-data.frame(statusquo=-1.09700, age=mean(Chile$age),  income=mean(Chile$income), education="S")
 
-    LowSupportSQ <- predict(Chile.out, newdata = data.frame.Chile.LowSQ,
-        type = "response", se.fit = TRUE)
-    LowSupportSQ
+LowSupportSQ <- predict(Chile.out, newdata=data.frame.Chile.LowSQ, type="response", se.fit=TRUE)
+LowSupportSQ
+```
 
     ## $fit
     ##          1 
@@ -408,8 +488,9 @@ likely to see different predicted probabilities.
     ## $residual.scale
     ## [1] 1
 
-    c(LowSupportSQ$fit - 1.96 * LowSupportSQ$se.fit, LowSupportSQ$fit +
-        1.96 * LowSupportSQ$se.fit)
+``` r
+c(LowSupportSQ$fit-1.96*LowSupportSQ$se.fit, LowSupportSQ$fit+1.96*LowSupportSQ$se.fit)
+```
 
     ##          1          1 
     ## 0.01794585 0.04250890
@@ -417,16 +498,16 @@ likely to see different predicted probabilities.
 Considering a respondent who has a lower support of the status quo, the
 probability that they will vote in favor of keeping the military regime
 in power is, on average, 0.03. The prediction interval for this
-predicted probability is \[0.018, 0.042\].
+predicted probability is $$0.018, 0.042$$.
 
-    # Predict for higher support for SQ
+``` r
+# Predict for higher support for SQ
 
-    data.frame.Chile.HighSQ <- data.frame(statusquo = 1.16602, age = mean(Chile$age),
-        income = mean(Chile$income), education = "S")
+data.frame.Chile.HighSQ<-data.frame(statusquo=1.16602, age=mean(Chile$age),  income=mean(Chile$income), education="S")
 
-    HighSupportSQ <- predict(Chile.out, newdata = data.frame.Chile.HighSQ,
-        type = "response", se.fit = TRUE)
-    HighSupportSQ
+HighSupportSQ <- predict(Chile.out, newdata=data.frame.Chile.HighSQ, type="response", se.fit=TRUE)
+HighSupportSQ
+```
 
     ## $fit
     ##         1 
@@ -439,8 +520,9 @@ predicted probability is \[0.018, 0.042\].
     ## $residual.scale
     ## [1] 1
 
-    c(HighSupportSQ$fit - 1.96 * HighSupportSQ$se.fit, HighSupportSQ$fit +
-        1.96 * HighSupportSQ$se.fit)
+``` r
+c(HighSupportSQ$fit-1.96*HighSupportSQ$se.fit, HighSupportSQ$fit+1.96*HighSupportSQ$se.fit)
+```
 
     ##         1         1 
     ## 0.9660593 0.9876355
@@ -448,52 +530,60 @@ predicted probability is \[0.018, 0.042\].
 Considering a respondent who supports the status quo, the probability he
 votes in favor of keeping the military regime in power is 0.976, on
 average. The prediction interval for this predicted probability is
-\[0.966, 0.987\].
+$$0.966, 0.987$$.
 
-## Plotting predicted probabilities for different values of Status Quo (low tech version)
+## 6.1 Plotting predicted probabilities for different values of Status Quo (low tech version)
 
-    ## Low tech - A la Faraway
-    sq <- seq(from = min(na.omit(Chile$statusquo)), to = max(na.omit(Chile$statusquo)),
-        length.out = 100)
-    # Look at sq
-    head(sq)
+``` r
+## Low tech - A la Faraway
+sq<-seq(from=min(na.omit(Chile$statusquo)), to=max(na.omit(Chile$statusquo)), length.out=100)
+# Look at sq
+head(sq)
+```
 
     ## [1] -1.725940 -1.691198 -1.656455 -1.621713 -1.586971 -1.552228
 
-    min(na.omit(Chile$statusquo))
+``` r
+min(na.omit(Chile$statusquo))
+```
 
     ## [1] -1.72594
 
-    max(na.omit(Chile$statusquo))
+``` r
+max(na.omit(Chile$statusquo))
+```
 
     ## [1] 1.71355
 
-    #
-    new.data.sq <- data.frame(statusquo = sq, age = mean(Chile$age),
-        income = mean(Chile$income), education = "S")
+``` r
+# 
+new.data.sq<-data.frame(statusquo=sq, age=mean(Chile$age),  income=mean(Chile$income), education="S")
 
-    pred.prob <- predict(Chile.out, newdata = new.data.sq, type = "response",
-        se.fit = TRUE)
-    # this object includes pred.prob$fit and pred.prob$se.fit
-    length(pred.prob$fit)
+pred.prob<-predict(Chile.out, newdata=new.data.sq, type="response", se.fit=TRUE )
+# this object includes pred.prob$fit and pred.prob$se.fit
+length(pred.prob$fit)
+```
 
     ## [1] 100
 
-    plot(NULL, xlab = "Support for the Status Quo", ylab = "P(Vote in Support of the Military Regime)",
-        ylim = c(0, 1), xlim = c(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo))))
-    lines(sq, pred.prob$fit, lty = 1, lwd = 2)
-    lines(sq, pred.prob$fit + 1.96 * pred.prob$se.fit, lty = 2)
-    lines(sq, pred.prob$fit - 1.96 * pred.prob$se.fit, lty = 2)
+``` r
+plot(NULL,xlab="Support for the Status Quo", ylab="P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+lines(sq, pred.prob$fit, lty=1, lwd=2)
+lines(sq, pred.prob$fit+1.96*pred.prob$se.fit, lty=2 )
+lines(sq, pred.prob$fit-1.96*pred.prob$se.fit, lty=2 )
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-21-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
-## Plotting predicted probabilities for different values of Status Quo (Monte Carlo simulation)
+## 6.2 Plotting predicted probabilities for different values of Status Quo (Monte Carlo simulation)
 
 Remember to read Gelman and Hill, Chapter 7!
 
 Simulation of predictions:
 
-    library(arm)  #sim #this library has plogis which is the ilogit from the faraway library. 
+``` r
+library(arm) #sim #this library has plogis which is the ilogit from the faraway library. 
+```
 
     ## Loading required package: MASS
 
@@ -513,10 +603,10 @@ Simulation of predictions:
     ## 
     ##     logit
 
-    # Use either one but for ilogit you have to call
-    # library(faraway). By hand, exp(eta)/(1+exp(eta)) gives
-    # the same result.
-    library(faraway)  # for ilogit
+``` r
+#Use either one but for ilogit you have to call library(faraway). By hand, exp(eta)/(1+exp(eta)) gives the same result.
+library(faraway) # for ilogit
+```
 
     ## 
     ## Attaching package: 'faraway'
@@ -529,9 +619,10 @@ Simulation of predictions:
     ## 
     ##     logit, vif
 
-    # The following function produces the coefficient from the
-    # model
-    coef(Chile.out)
+``` r
+#The following function produces the coefficient from the model
+coef(Chile.out)
+```
 
     ##   (Intercept)     statusquo           age        income   educationPS 
     ##  7.008857e-01  3.186245e+00  2.228265e-03 -2.418958e-06 -1.028009e+00 
@@ -543,7 +634,7 @@ follow the order in which they appear in the summary of the model. You
 can use coef(Chile.out) as a guideline. This line is different that
 creating a new.data for the previous example
 
-Important! Use na.omit otherwise mean(Chile$age) will be NA! The same
+Important! Use na.omit otherwise mean(Chile\$age) will be NA! The same
 with income
 
 HOW TO USE: BELOW NOTICE THE ORDER OF THE VALUES FOLLOW THE ORDER OF THE
@@ -552,31 +643,37 @@ ORDER IN WHICH YOU PUT THEM IN THE REGRESSION glm(y~….). YOU HAVE TO
 CHANGE THIS WHENEVER YOU ARE USING THIS BECAUSE YOU WILL HAVE DIFFERENT
 VARIABLES AND VALUES.
 
-    # Create a range of values for "status quo"
-    sq<-seq(from=min(na.omit(Chile$statusquo)), to=max(na.omit(Chile$statusquo)), length.out=1000)
-    sq.x<-cbind(1, #intercept
-    sq, #statusquo we want to vary
-    mean(na.omit(Chile$age)), #age set at its mean
-    mean(na.omit(Chile$income)), #income set at its mean
-    0, # we set education at its mode, secondary education, so PS is 0
-    1)
-    # Simulate from the model sim(model, n=1000) 1000 draws,
-    # and extract coefficients from the simulation
-    sim.chile <- coef(sim(Chile.out, n = 1000))
+``` r
+# Create a range of values for "status quo"
+sq<-seq(from=min(na.omit(Chile$statusquo)), to=max(na.omit(Chile$statusquo)), length.out=1000)
+sq.x<-cbind(1, #intercept
+sq, #statusquo we want to vary
+mean(na.omit(Chile$age)), #age set at its mean
+mean(na.omit(Chile$income)), #income set at its mean
+0, # we set education at its mode, secondary education, so PS is 0
+1)
+# Simulate from the model sim(model, n=1000) 1000 draws,
+# and extract coefficients from the simulation
+sim.chile <- coef(sim(Chile.out, n = 1000))
+```
 
 **DETOUR:** To understand the simulation, do this:
 
-    head(sim.chile)
+``` r
+head(sim.chile)
+```
 
     ##      (Intercept) statusquo           age        income educationPS educationS
-    ## [1,]   1.2517326  3.041746 -0.0002812351 -5.831242e-06  -1.2227028 -1.1872434
-    ## [2,]   0.6560295  3.268153  0.0071401905 -1.867630e-06  -1.1657094 -0.5741178
-    ## [3,]   0.4479073  3.283664  0.0093383295 -6.053442e-06  -0.7422804 -0.7396884
-    ## [4,]   1.3128584  3.349469 -0.0066545460 -4.850932e-06  -1.0167211 -0.9131881
-    ## [5,]   0.5937034  3.118472  0.0047564000 -5.896995e-06  -0.9628720 -0.6218799
-    ## [6,]   0.9490899  3.441321 -0.0010748985 -2.162974e-06  -0.9745252 -0.8243508
+    ## [1,]   0.7952199  3.137797 -0.0043091044 -5.105123e-06  -0.8338068 -0.2732975
+    ## [2,]   1.1408564  3.435716  0.0012640708 -6.353132e-06  -0.9789630 -0.4972710
+    ## [3,]   0.1838709  3.139835  0.0112894977 -1.914417e-06  -0.4715895 -0.3811792
+    ## [4,]   1.2515808  3.358456 -0.0107769787 -5.590791e-07  -0.8751723 -0.8693100
+    ## [5,]   0.6466517  3.111303  0.0004022192 -5.152286e-07  -0.7973025 -0.8913479
+    ## [6,]   1.0159525  3.418619 -0.0016748836 -5.028055e-06  -0.4651176 -0.7233492
 
-    summary(Chile.out)
+``` r
+summary(Chile.out)
+```
 
     ## 
     ## Call:
@@ -615,150 +712,158 @@ one of the properties! So we can do this.
 If you do a summary of the simulation, you can see that the mean for
 each coefficient is close to the estimate in the summary of the model:
 
-    summary(sim.chile)
+``` r
+summary(sim.chile)
+```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.6147   Min.   :2.756   Min.   :-0.027094   Min.   :-1.130e-05  
-    ##  1st Qu.: 0.4630   1st Qu.:3.094   1st Qu.:-0.002182   1st Qu.:-4.508e-06  
-    ##  Median : 0.7058   Median :3.193   Median : 0.002185   Median :-2.624e-06  
-    ##  Mean   : 0.7020   Mean   :3.190   Mean   : 0.002385   Mean   :-2.635e-06  
-    ##  3rd Qu.: 0.9237   3rd Qu.:3.289   3rd Qu.: 0.007134   3rd Qu.:-7.039e-07  
-    ##  Max.   : 2.0350   Max.   :3.690   Max.   : 0.026482   Max.   : 8.011e-06  
-    ##   educationPS         educationS      
-    ##  Min.   :-1.95567   Min.   :-1.46456  
-    ##  1st Qu.:-1.23770   1st Qu.:-0.82700  
-    ##  Median :-1.01461   Median :-0.65773  
-    ##  Mean   :-1.01113   Mean   :-0.66747  
-    ##  3rd Qu.:-0.78191   3rd Qu.:-0.50926  
-    ##  Max.   :-0.03057   Max.   : 0.03249
+    ##  Min.   :-0.4160   Min.   :2.759   Min.   :-0.022143   Min.   :-1.100e-05  
+    ##  1st Qu.: 0.4464   1st Qu.:3.083   1st Qu.:-0.002781   1st Qu.:-4.214e-06  
+    ##  Median : 0.6911   Median :3.187   Median : 0.002300   Median :-2.306e-06  
+    ##  Mean   : 0.6957   Mean   :3.184   Mean   : 0.002272   Mean   :-2.356e-06  
+    ##  3rd Qu.: 0.9394   3rd Qu.:3.279   3rd Qu.: 0.007088   3rd Qu.:-3.992e-07  
+    ##  Max.   : 1.8148   Max.   :3.718   Max.   : 0.025066   Max.   : 6.815e-06  
+    ##   educationPS        educationS      
+    ##  Min.   :-2.1410   Min.   :-1.49604  
+    ##  1st Qu.:-1.2656   1st Qu.:-0.83812  
+    ##  Median :-1.0235   Median :-0.67490  
+    ##  Mean   :-1.0367   Mean   :-0.67357  
+    ##  3rd Qu.:-0.8022   3rd Qu.:-0.52474  
+    ##  Max.   :-0.1035   Max.   :-0.01844
 
 You can make a histogram of the simulated intercepts:
 
-    hist(sim.chile[, 1], main = "intercept", 30)
+``` r
+hist(sim.chile[,1], main="intercept", 30)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-25-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
 
 If you calculate the standard deviation you get the SE of the intercept
 from the model output,
 
-    sd(sim.chile[, 1])
+``` r
+sd(sim.chile[,1])
+```
 
-    ## [1] 0.3542516
+    ## [1] 0.3563788
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
 
 **Let’s get back at creating a figure of predicted probabilities.**
 
-    ### Cont. with figure here!
-    pred.sq <- ilogit(sq.x %*% t(sim.chile))
+``` r
+### Cont. with figure here!
+pred.sq <- ilogit(sq.x%*%t(sim.chile))
 
-    # This is matrix multiplication. This is like on OLS X
-    # beta^T. If you see:
-    dim(sq.x)  #100x6
+#This is matrix multiplication. This is like on OLS X beta^T. If you see:
+dim(sq.x) #100x6
+```
 
     ## [1] 1000    6
 
-    dim(t(sim.chile))  # 6x1000 
+``` r
+dim(t(sim.chile)) # 6x1000 
+```
 
     ## [1]    6 1000
 
-    # So the PP will be 100x1000 - This is 1000 predictions for
-    # each value of sq (we had set sq to have 100 values).
-    dim(pred.sq)
+``` r
+#So the PP will be 100x1000 - 
+#This is 1000 predictions for each value of sq (we had set sq to have 100 values).
+dim(pred.sq)
+```
 
     ## [1] 1000 1000
 
-    # We create the figure.  Observe that x is sq and y is
-    # calculating with each of the 1000 predictions of each x
-    # value
-    plot(NULL, xlab = "Support for the Status Quo", ylab = "P(Vote in Support of the Military Regime)",
-        ylim = c(0, 1), xlim = c(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo))))
-    lines(sq, apply(pred.sq, 1, quantile, 0.05), lty = 2)
-    lines(sq, apply(pred.sq, 1, quantile, 0.5), lwd = 3)
-    lines(sq, apply(pred.sq, 1, quantile, 0.95), lty = 2)
+``` r
+# We create the figure. 
+#Observe that x is sq and y is calculating with each of the 1000 predictions of each x value
+plot(NULL, xlab="Support for the Status Quo", ylab="P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+lines(sq, apply(pred.sq, 1, quantile, .05), lty = 2)
+lines(sq, apply(pred.sq, 1, quantile, .5), lwd = 3)
+lines(sq, apply(pred.sq, 1, quantile, .95), lty = 2)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-27-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
 
-# First Differences: Plotting predicted probabilities for men and women, and first difference (Monte Carlo simulation)
+# 7 First Differences: Plotting predicted probabilities for men and women, and first difference (Monte Carlo simulation)
 
-    ########## Plot for gender
+``` r
+##########
+# Plot for gender
+##############
 
-    Chile.out.gender = glm(yes ~ statusquo + age + income + education +
-        sex, family = binomial(link = logit), data = Chile)
+Chile.out.gender = glm(yes ~ statusquo+age+income+education+sex, family=binomial(link=logit), data=Chile) 
 
-    new.data.M <- data.frame(sex = "M", age = mean(Chile$age), income = mean(Chile$income),
-        education = "S", statusquo = mean(Chile$statusquo))
-    new.data.F <- data.frame(sex = "F", age = mean(Chile$age), income = mean(Chile$income),
-        education = "S", statusquo = mean(Chile$statusquo))
+new.data.M<-data.frame(sex="M", age=mean(Chile$age),  income=mean(Chile$income), education="S", statusquo=mean(Chile$statusquo))
+new.data.F<-data.frame(sex="F", age=mean(Chile$age),  income=mean(Chile$income), education="S",statusquo=mean(Chile$statusquo))
 
-    pred.prob <- predict(Chile.out.gender, newdata = new.data.M,
-        type = "response", se.fit = TRUE)
-    # this object includes pred.prob$fit and pred.prob$se.fit
-    pred.prob.F <- predict(Chile.out, newdata = new.data.F, type = "response",
-        se.fit = TRUE)
+pred.prob<-predict(Chile.out.gender, newdata=new.data.M, type="response", se.fit=TRUE )
+# this object includes pred.prob$fit and pred.prob$se.fit
+pred.prob.F<-predict(Chile.out, newdata=new.data.F, type="response", se.fit=TRUE )
 
-    dif <- pred.prob.F$fit - pred.prob$fit
-    SE.diff <- sqrt(pred.prob.F$se.fit^2 + pred.prob$se.fit^2)
+dif<-pred.prob.F$fit-pred.prob$fit
+SE.diff <- sqrt(pred.prob.F$se.fit^2+pred.prob$se.fit^2)
 
-    par(mar = c(2, 19, 1, 1))
-    plot(-20, -10, pch = 17, ylim = c(0, 4), xlim = c(-0.1, 0.6),
-        ylab = "", yaxt = "n", xlab = "")
-    points(pred.prob$fit[1], 3, pch = 17, cex = 1)  # point for male
-    points(pred.prob.F$fit, 2, pch = 17, cex = 1)  # point for female
-    points(dif, 1, pch = 17, cex = 1)  # point for female
-    text(pred.prob$fit[1], 3.2, "0.4")
-    text(pred.prob.F$fit[1], 2.2, "0.53")
-    text(dif, 1.2, "0.13")
-    segments(pred.prob$fit - 1.96 * pred.prob$se.fit, 3, pred.prob$fit +
-        1.96 * pred.prob$se.fit, 3, lty = 1, col = "black", lwd = 2)  #CI for male
-    segments(pred.prob.F$fit - 1.96 * pred.prob$se.fit, 2, pred.prob.F$fit +
-        1.96 * pred.prob$se.fit, 2, lty = 1, col = "black", lwd = 2)  # CI for female
-    segments(dif - 1.96 * SE.diff, 1, dif + 1.96 * SE.diff, 1, lty = 1,
-        col = "green", lwd = 2)  # CI for female
-    abline(v = 0, lty = 3)
+par(mar=c(2,19,1,1))
+plot(-20,-10, pch=17, ylim=c(0,4), xlim=c(-0.1,.6), ylab="",yaxt = 'n', xlab="")
+points(pred.prob$fit[1], 3, pch=17, cex=1) # point for male
+points(pred.prob.F$fit, 2, pch=17, cex=1) # point for female
+points(dif, 1, pch=17, cex=1) # point for female
+text(pred.prob$fit[1], 3.2, "0.4")
+text(pred.prob.F$fit[1], 2.2, "0.53")
+text(dif, 1.2, "0.13")
+segments(pred.prob$fit-1.96*pred.prob$se.fit, 3, pred.prob$fit+1.96*pred.prob$se.fit, 3, lty=1, col='black', lwd=2) #CI for male
+segments(pred.prob.F$fit-1.96*pred.prob$se.fit, 2, pred.prob.F$fit+1.96*pred.prob$se.fit, 2, lty=1, col='black', lwd=2) # CI for female
+segments(dif-1.96*SE.diff, 1, dif+1.96*SE.diff, 1, lty=1, col='green', lwd=2) # CI for female
+abline(v=0, lty=3)
 
-    axis(2, at = 3:1, labels = c("P(Vote Yes|Male)", "P(Vote Yes|Female)",
-        "P(Vote Yes|Female)-P(Vote Yes|Female)"), las = 1)
+axis(2, at=3:1,labels=c("P(Vote Yes|Male)", "P(Vote Yes|Female)", "P(Vote Yes|Female)-P(Vote Yes|Female)"), las=1)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-28-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
 
 We will cover on Monte Carlo simulations and first differences on the
 next Lab + lecture. Check the lecture slides for the calculation of the
 standard error for the first differences!
 
-# Marginal Change in Probability (for Status Quo)
+# 8 Marginal Change in Probability (for Status Quo)
 
 I am using the values of `statusquo` rather than creating the values
 because I also want to calculate the average marginal effect and for
 that, we want to use the data. The SE produced via simulation captures
 the uncertainty in the regression coefficients and the PDF.
 
-    sq <- sort(Chile$statusquo)
-    x.sq.1 <- cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)),
-        0, 1)
+``` r
+sq<-sort(Chile$statusquo)
+x.sq.1<-cbind(1, sq, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)
+```
 
 Here we are not using dlogis but using the equation we get when taking
 the derivative w/respect to statusquo:
 
-    # Different way of calculating the same as below.  Here we
-    # are not using dlogis but using the equation we get when
-    # taking the derivative w/respect to statusquo. sim.chile
-    # <- coef(sim(Chile.out, n = 10000))
-    # eta<-x.sq.1%*%t(sim.chile)
-    # Marginal.change<-beta.sq*(exp(-eta)/(1+exp(-eta))^2)
-    # mean(Marginal.change)
+``` r
+# Different way of calculating the same as below. 
+#Here we are not using dlogis but using the equation we get when taking the derivative w/respect to statusquo.
+#sim.chile <- coef(sim(Chile.out, n = 10000))
+#eta<-x.sq.1%*%t(sim.chile)
+#Marginal.change<-beta.sq*(exp(-eta)/(1+exp(-eta))^2)
+#mean(Marginal.change) 
+```
 
-    # The SE produced via simulation captures the uncertainty
-    # in the regression coefficients and the PDF
-    sim.chile <- coef(sim(Chile.out, n = 10000))
-    # Beta for status quo
-    beta.sq <- sim.chile[, 2]
-    # Calculate ME
-    Marginal.change <- beta.sq * dlogis(x.sq.1 %*% t(sim.chile))
-    mean(Marginal.change)
+``` r
+#The SE produced via simulation captures the uncertainty in the regression coefficients and the PDF 
+sim.chile <- coef(sim(Chile.out, n = 10000))
+# Beta for status quo
+beta.sq<-sim.chile[,2]
+# Calculate ME
+Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
+mean(Marginal.change) 
+```
 
-    ## [1] 0.1924337
+    ## [1] 0.1924872
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -780,19 +885,20 @@ changes on the higher values for SQ correspond to very small changes in
 probability. (This is basically the definition of partial derivative and
 why calculus is so important here.)
 
-    plot(NULL, xlab = "Support for the Status Quo", ylab = "Marginal Change in P(Vote in Support of the Military Regime)",
-        ylim = c(0, 1), xlim = c(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo))))
-    lines(sq, apply(Marginal.change, 1, quantile, 0.05), lty = 2)
-    lines(sq, apply(Marginal.change, 1, quantile, 0.5), lwd = 3)
-    lines(sq, apply(Marginal.change, 1, quantile, 0.95), lty = 2)
+``` r
+plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+lines(sq, apply(Marginal.change, 1, quantile, .05), lty = 2)
+lines(sq, apply(Marginal.change, 1, quantile, .5), lwd = 3)
+lines(sq, apply(Marginal.change, 1, quantile, .95), lty = 2)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-32-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 **Note: My opinion is that, for nonlinear models, first differences
 figures are more easy to interpret and provide my substantive insights
 for readers than ME figures.**
 
-# Marginal Change in Probability (for Income)
+# 9 Marginal Change in Probability (for Income)
 
 I am using the values of `income` rather than creating the values
 because I also want to calculate the average marginal effect and for
@@ -807,20 +913,22 @@ predictions because, for instance, we know that we would observe higher
 income to be associated with older people or certain levels of
 education.*
 
-    income <- sort(na.omit(Chile$income))
-    x.income.1 <- cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),
-        income, 0, 1)
+``` r
+income<-sort(na.omit(Chile$income))
+x.income.1<-cbind(1, mean(na.omit(Chile$statusquo)), mean(na.omit(Chile$age)),income,  0, 1)
+```
 
-    # Different way of calculating the same as below.  Here we
-    # are not using dlogis but using the equation we get when
-    # taking the derivative w/respect to statusquo.
-    sim.chile <- coef(sim(Chile.out, n = 10000))
-    beta.income <- sim.chile[, "income"]
-    eta <- x.income.1 %*% t(sim.chile)
-    marginal.change.income <- beta.income * (exp(-eta)/(1 + exp(-eta))^2)
-    mean(marginal.change.income)
+``` r
+# Different way of calculating the same as below. 
+#Here we are not using dlogis but using the equation we get when taking the derivative w/respect to statusquo.
+sim.chile <- coef(sim(Chile.out, n = 10000))
+beta.income <- sim.chile[,'income']
+eta<-x.income.1%*%t(sim.chile)
+marginal.change.income<-beta.income*(exp(-eta)/(1+exp(-eta))^2)
+mean(marginal.change.income) 
+```
 
-    ## [1] -6.107187e-07
+    ## [1] -6.011696e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
@@ -842,24 +950,23 @@ values. The marginal change varies at different points of income. Above
 we were calculating the average marginal effect. Remember the equation
 from the lecture! The ME is non-linear.
 
-    # The SE produced via simulation captures the uncertainty
-    # in the regression coefficients and the PDF
-    sim.chile <- coef(sim(Chile.out, n = 10000))
-    # Beta for status quo
-    beta.income <- sim.chile[, "income"]
-    # Calculate ME
-    Marginal.change <- beta.income * dlogis(x.income.1 %*% t(sim.chile))
-    # mean(Marginal.change)
-    plot(NULL, xlab = "Income", ylab = "Marginal Change in P(Support Military)",
-        ylim = c(-1e-06, 0), xlim = c(min(na.omit(Chile$income)),
-            max(na.omit(Chile$income))))
-    lines(income, apply(Marginal.change, 1, quantile, 0.05), lty = 2)
-    lines(income, apply(Marginal.change, 1, quantile, 0.5), lwd = 3)
-    lines(income, apply(Marginal.change, 1, quantile, 0.95), lty = 2)
+``` r
+#The SE produced via simulation captures the uncertainty in the regression coefficients and the PDF 
+sim.chile <- coef(sim(Chile.out, n = 10000))
+# Beta for status quo
+beta.income<-sim.chile[,'income']
+# Calculate ME
+Marginal.change<-beta.income*dlogis(x.income.1%*%t(sim.chile))
+#mean(Marginal.change) 
+plot(NULL, xlab="Income", ylab="Marginal Change in P(Support Military)", ylim=c(-0.000001, 0), xlim=c(min(na.omit(Chile$income)),max(na.omit(Chile$income))))
+lines(income, apply(Marginal.change, 1, quantile, .05), lty = 2)
+lines(income, apply(Marginal.change, 1, quantile, .5), lwd = 3)
+lines(income, apply(Marginal.change, 1, quantile, .95), lty = 2)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-35-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
-# Plotting using `curve` instead of `lines`
+# 10 Plotting using `curve` instead of `lines`
 
 This follows `curve` use from Gelman and Hill, assigned reading chapter.
 Call sq “x” because it required a variable called “x” which is the one
@@ -867,35 +974,30 @@ we want to plot in the x axis. Rather than creating objects, we have to
 use the expressions within curve. It will take x to be the variable for
 the x axis automatically.
 
-    # important - call sq 'x'
-    x <- seq(from = min(na.omit(Chile$statusquo)), to = max(na.omit(Chile$statusquo)),
-        length.out = 1000)
+``` r
+# important - call sq "x" 
+x<-seq(from=min(na.omit(Chile$statusquo)), to=max(na.omit(Chile$statusquo)), length.out=1000)
 
-    # Same code as above, but replacing sq for x
-    x.sq.1 <- cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)),
-        0, 1)
-    sim.chile <- coef(sim(Chile.out, n = 1000))
-    beta.sq <- sim.chile[, 2]
-    Marginal.change <- beta.sq * dlogis(x.sq.1 %*% t(sim.chile))
-    mean(Marginal.change)
+#Same code as above, but replacing sq for x
+x.sq.1<-cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)
+sim.chile <- coef(sim(Chile.out, n = 1000))
+beta.sq<-sim.chile[,2]
+Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
+mean(Marginal.change) 
+```
 
-    ## [1] 0.2886156
+    ## [1] 0.289199
 
-    plot(NULL, xlab = "Support for the Status Quo", ylab = "Marginal Change in P(Vote in Support of the Military Regime)",
-        ylim = c(0, 1), xlim = c(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo))))
-    curve(apply(beta.sq * dlogis(cbind(1, x, mean(na.omit(Chile$age)),
-        mean(na.omit(Chile$income)), 0, 1) %*% t(sim.chile)), 1,
-        quantile, 0.5), add = TRUE, lwd = 3)
-    curve(apply(beta.sq * dlogis(cbind(1, x, mean(na.omit(Chile$age)),
-        mean(na.omit(Chile$income)), 0, 1) %*% t(sim.chile)), 1,
-        quantile, 0.05), add = TRUE, lty = 2)
-    curve(apply(beta.sq * dlogis(cbind(1, x, mean(na.omit(Chile$age)),
-        mean(na.omit(Chile$income)), 0, 1) %*% t(sim.chile)), 1,
-        quantile, 0.95), add = TRUE, lty = 2)
+``` r
+plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
+curve(apply(beta.sq*dlogis(cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)%*%t(sim.chile)), 1, quantile, .5), add=TRUE, lwd=3)
+curve(apply(beta.sq*dlogis(cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)%*%t(sim.chile)), 1, quantile, .05), add=TRUE, lty=2)
+curve(apply(beta.sq*dlogis(cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)%*%t(sim.chile)), 1, quantile, .95), add=TRUE, lty=2)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-36-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
 
-# Multinomial Logit
+# 11 Multinomial Logit
 
 In a few weeks we will cover Multinomial Logit. Here is a short
 introduction. In Chile voting is mandatory, so we can recode those
@@ -905,18 +1007,18 @@ saying they do not know who they will vote/refused to respond (coded
 You can also run a different model in which we join abstain + undecided
 to analyze differences.
 
-    # reset data
-    data(Chile)
-    # Chile$vote.3<-recode(Chile$vote, ''A'='U'; NA='U'')
-    # summary(Chile$vote.3)
+``` r
+# reset data
+data(Chile)
+#Chile$vote.3<-recode(Chile$vote, "'A'='U'; NA='U'")
+#summary(Chile$vote.3)
 
-    Chile$vote.4 <- recode(Chile$vote, "NA='U'")
+Chile$vote.4<-recode(Chile$vote, "NA='U'")
 
-    library(nnet)
-    # m<-multinom(vote.3~ statusquo+age+income+education+sex,
-    # data=Chile)
-    m <- multinom(vote.4 ~ statusquo + age + income + education +
-        sex, data = Chile)
+library(nnet)
+#m<-multinom(vote.3~ statusquo+age+income+education+sex, data=Chile)
+m<-multinom(vote.4~ statusquo+age+income+education+sex, data=Chile)
+```
 
     ## # weights:  32 (21 variable)
     ## initial  value 3578.025746 
@@ -926,7 +1028,9 @@ to analyze differences.
     ## final  value 2234.754515 
     ## converged
 
-    summary(m)
+``` r
+summary(m)  
+```
 
     ## Call:
     ## multinom(formula = vote.4 ~ statusquo + age + income + education + 
@@ -958,50 +1062,45 @@ to analyze differences.
 Let’s make a plot and not dwell on the summary output.Rember that
 `in favor` means voting in favor of the authoritarian regime.
 
-    sq <- seq(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo)),
-        length.out = 50)
-
-    pF <- predict(m, newdata = data.frame(statusquo = sq, age = mean(na.omit(Chile$age)),
-        income = mean(na.omit(Chile$income)), education = "S", sex = "F"),
-        type = "probs")
-    pM <- predict(m, newdata = data.frame(statusquo = sq, age = mean(na.omit(Chile$age)),
-        income = mean(na.omit(Chile$income)), education = "S", sex = "M"),
-        type = "probs")
+``` r
+sq<-seq(min(na.omit(Chile$statusquo)), max(na.omit(Chile$statusquo)), length.out=50)
+ 
+pF<-predict(m, newdata=data.frame(statusquo=sq, age=mean(na.omit(Chile$age)), income=mean(na.omit(Chile$income)), education="S", sex="F" ), type="probs")
+pM<-predict(m, newdata=data.frame(statusquo=sq, age=mean(na.omit(Chile$age)), income=mean(na.omit(Chile$income)), education="S", sex="M" ), type="probs")
 
 
-    par(mfrow = c(2, 2))
-    plot("NULL", xlab = "Support of the status quo", ylab = "P(Abstain)",
-        ylim = c(0, 1), xlim = c(min(sq), max(sq)), main = "Abstain")
-    lines(sq, pF[, 1], lwd = 3, col = "gray", lty = 1)
-    lines(sq, pM[, 1], lwd = 3, lty = 3)
+par(mfrow=c(2,2))
+plot("NULL", xlab="Support of the status quo", ylab="P(Abstain)", ylim=c(0,1), xlim=c(min(sq), max(sq)), main="Abstain")
+lines(sq, pF[,1], lwd=3, col="gray", lty=1)
+lines(sq, pM[,1], lwd=3,  lty=3)
 
-    plot("NULL", xlab = "Support of the status quo", ylab = "P(Undecided Vote)",
-        ylim = c(0, 1), xlim = c(min(sq), max(sq)), main = "Undecided")
-    lines(sq, pF[, 3], lwd = 3, col = "orange", lty = 1)
-    lines(sq, pM[, 3], lwd = 3, lty = 3)
+plot("NULL", xlab="Support of the status quo", ylab="P(Undecided Vote)", ylim=c(0,1), xlim=c(min(sq), max(sq)), main="Undecided")
+lines(sq, pF[,3], lwd=3, col="orange", lty=1)
+lines(sq, pM[,3], lwd=3,  lty=3)
 
-    plot("NULL", xlab = "Support of the status quo", ylab = "P(Voting No)",
-        ylim = c(0, 1), xlim = c(min(sq), max(sq)), main = "Against")
-    lines(sq, pF[, 2], lwd = 3, col = "purple", lty = 1)
-    lines(sq, pM[, 2], lwd = 3, lty = 3)
+plot("NULL", xlab="Support of the status quo", ylab="P(Voting No)", ylim=c(0,1), xlim=c(min(sq), max(sq)), main="Against")
+lines(sq, pF[,2], lwd=3, col="purple", lty=1)
+lines(sq, pM[,2], lwd=3,  lty=3)
 
-    plot("NULL", xlab = "Support of the status quo", ylab = "P(Voting Yes)",
-        ylim = c(0, 1), xlim = c(min(sq), max(sq)), main = "In Favor")
-    lines(sq, pF[, 4], lwd = 3, col = "red", lty = 1)
-    lines(sq, pM[, 4], lwd = 3, lty = 3)
+plot("NULL", xlab="Support of the status quo", ylab="P(Voting Yes)", ylim=c(0,1), xlim=c(min(sq), max(sq)), main="In Favor")
+lines(sq, pF[,4], lwd=3, col="red", lty=1)
+lines(sq, pM[,4], lwd=3,  lty=3)
+```
 
-![](BinomialOutcomes_files/figure-markdown_strict/unnamed-chunk-38-1.png)
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
 **Discussion:** What can we infer from this figure? What are we learning
 with this modeling strategy compared to the logit model?
 
-## `mlogit` package
+## 11.1 `mlogit` package
 
 We can also fit a model using the `mlogit` package and include two
 different categories for those `undecided` and those who claimed they
 would `abstain`.
 
-    library(mlogit)
+``` r
+library(mlogit)
+```
 
     ## Loading required package: dfidx
 
@@ -1016,22 +1115,22 @@ would `abstain`.
     ## 
     ##     filter
 
-    Chile$respondent <- seq(1, nrow(Chile))
+``` r
+Chile$respondent<-seq(1, nrow(Chile))
 
-    data <- mlogit.data(Chile, choice = "vote", shape = "wide", alt.levels = c("A",
-        "Y", "N", "U"), id.var = "respondent")
+data<-mlogit.data(Chile, choice="vote", shape="wide", alt.levels= c("A", "Y", "N", "U"), id.var="respondent")
+```
 
     ## Warning in dfidx::dfidx(data = data, dfa$idx, drop.index = dfa$drop.index, :
     ## the levels shouldn't be provided with a data set in wide format
 
-    # m<-mlogit(vote~ |statusquo+age+income+education+sex,
-    # data=data)
+``` r
+#m<-mlogit(vote~ |statusquo+age+income+education+sex, data=data)
 
-    m <- mlogit(vote ~ 1 | statusquo + age + income + education +
-        sex, data = Chile, shape = "wide")
-    m2 <- mlogit(vote ~ 1 | statusquo + age + income + education +
-        sex, data = Chile, shape = "wide", alt.subset = c("A", "U"))
-    hmftest(m, m2)
+m<-mlogit(vote~ 1|statusquo+age+income+education+sex, data=Chile, shape="wide")
+m2<-mlogit(vote~ 1|statusquo+age+income+education+sex, data=Chile, shape="wide", alt.subset=c("A", "U"))
+hmftest(m, m2)
+```
 
     ## 
     ##  Hausman-McFadden test
