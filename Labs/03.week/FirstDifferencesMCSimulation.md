@@ -3,14 +3,15 @@ First Differences and Monte Carlo Simulations
 Constanza F. Schibber
 2020-10-1
 
-**Agenda**
+- [1 Data: Voting Intentions in the 1988 Chilean
+  Plebiscite](#1-data-voting-intentions-in-the-1988-chilean-plebiscite)
+- [2 Model, Logit](#2-model-logit)
+- [3 Using the `sim` function in the `arm`
+  library](#3-using-the-sim-function-in-the-arm-library)
+- [4 First Differences: Sex & SQ](#4-first-differences-sex--sq)
+- [5 First Differences: Sex & Income](#5-first-differences-sex--income)
 
-- [Data](Data:%20Voting%20Intentions%20in%20the%201988%20Chilean%20Plebiscite)
-- [Simulation](#%20Using%20the%20%60sim%60%20function%20in%20the%20%60arm%60%20library)
-- [First Differences \# 1](#%20First%20Differences:%20Sex%20&%20SQ)
-- [First Differences \# 2](#%20First%20Differences:%20Sex%20&%20Income)
-
-# Data: Voting Intentions in the 1988 Chilean Plebiscite
+# 1 Data: Voting Intentions in the 1988 Chilean Plebiscite
 
 The Chile data frame has 2700 rows and 8 columns. The data are from a
 national survey conducted in April and May of 1988 by FLACSO/Chile.
@@ -83,7 +84,7 @@ data in your own work!
 Chile <- na.omit(Chile)
 ```
 
-# Model, Logit
+# 2 Model, Logit
 
 ``` r
 Chile.out <- glm(yes ~ statusquo + age + income + sex, family = binomial(link = logit),
@@ -120,7 +121,7 @@ stargazer(Chile.out, type = "text")
     ## =============================================
     ## Note:             *p<0.1; **p<0.05; ***p<0.01
 
-# Using the `sim` function in the `arm` library
+# 3 Using the `sim` function in the `arm` library
 
 We simulate predictions for sex = Female and sex = Male. Remember that
 we are setting other covariates at their mean, but in a few weeks we
@@ -197,9 +198,9 @@ CI.FD.M.F <- quantile(first.difference, probs = c(0.025, 0.975))
 ```
 
     ##        2.5%         50%       97.5% 
-    ## -0.24266928 -0.15607783 -0.06435134
+    ## -0.24242150 -0.15285521 -0.05949068
 
-# First Differences: Sex & SQ
+# 4 First Differences: Sex & SQ
 
 Let’s add another dimension: we can calculate predictions varying two
 covariates – status quo and sex.
@@ -274,7 +275,7 @@ Important for interpretation:
   to 1. Because the first difference is positive, it means women were
   more likely than men to support the Pinochet regime.
 
-# First Differences: Sex & Income
+# 5 First Differences: Sex & Income
 
 Now, we calculate predictions for another two varying covariates –
 income and sex.
