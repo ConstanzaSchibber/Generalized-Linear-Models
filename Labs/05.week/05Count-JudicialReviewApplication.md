@@ -3,7 +3,25 @@ Count Models: Judicial Review Application
 Constanza F. Schibber
 2018-06-16
 
-# Example: Judicial Review
+- [1 Example: Judicial Review](#1-example-judicial-review)
+  - [1.1 Descriptive Statistics](#11-descriptive-statistics)
+- [2 Poission Regression](#2-poission-regression)
+- [3 IRRs - Incidence Rate Ratios](#3-irrs---incidence-rate-ratios)
+- [4 Making Predictions for Poisson
+  Models](#4-making-predictions-for-poisson-models)
+  - [4.1 Predictions for Unified
+    Governments](#41-predictions-for-unified-governments)
+- [5 Predictions for Divided
+  Government](#5-predictions-for-divided-government)
+- [6 Plotting Predicted counts](#6-plotting-predicted-counts)
+- [7 Overdisperson in Count Models](#7-overdisperson-in-count-models)
+  - [7.1 Poisson](#71-poisson)
+  - [7.2 Is there Overdispersion?](#72-is-there-overdispersion)
+  - [7.3 Negative Binomial](#73-negative-binomial)
+  - [7.4 Compare Fitted Values from Poisson against Negative
+    Binomial](#74-compare-fitted-values-from-poisson-against-negative-binomial)
+
+# 1 Example: Judicial Review
 
 - Y, number of acts of Congress overturned by the Supreme Court each
   Congress
@@ -24,7 +42,7 @@ head(data_jr)
     ## 5        5     0    4.0       1 1798
     ## 6        6     0    4.8       1 1800
 
-## Descriptive Statistics
+## 1.1 Descriptive Statistics
 
 ``` r
 summary(data_jr)
@@ -74,7 +92,7 @@ axis(2,at=seq(0,100,by=10))
 
 ![](05Count-JudicialReviewApplication_files/figure-gfm/unified-1.png)<!-- -->
 
-# Poission Regression
+# 2 Poission Regression
 
 ``` r
 nulls.poisson<-glm(nulls ~ tenure + unified,
@@ -107,7 +125,7 @@ summary(nulls.poisson)
     ## 
     ## Number of Fisher Scoring iterations: 6
 
-# IRRs - Incidence Rate Ratios
+# 3 IRRs - Incidence Rate Ratios
 
 ``` r
 library(mfx)
@@ -146,14 +164,14 @@ nulls.poisson.IRR
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-# Making Predictions for Poisson Models
+# 4 Making Predictions for Poisson Models
 
 Here we do some predicted counts. In another lab we will use Monte Carlo
 simulations to calculate the predictions. Moreover, this model only has
 two covariates but in models with more covariates you should use the
 observed value approach which we will also cover later.
 
-## Predictions for Unified Governments
+## 4.1 Predictions for Unified Governments
 
 ``` r
 # Unified Government
@@ -170,7 +188,7 @@ nullhats$UB<-exp(nullhats$fit + 1.96*(nullhats$se.fit))
 nullhats$LB<-exp(nullhats$fit - 1.96*(nullhats$se.fit))
 ```
 
-# Predictions for Divided Government
+# 5 Predictions for Divided Government
 
 ``` r
 # Divided Government
@@ -187,7 +205,7 @@ nullhats.div$UB<-exp(nullhats.div$fit + 1.96*(nullhats$se.fit))
 nullhats.div$LB<-exp(nullhats.div$fit - 1.96*(nullhats$se.fit))
 ```
 
-# Plotting Predicted counts
+# 6 Plotting Predicted counts
 
 ``` r
 plot(simdata$tenure, nullhats$Yhat, t="l", lwd=2, ylim=c(0,5),
@@ -217,7 +235,7 @@ lines(simdata$tenure,nullhats.div$LB,lwd=1,lty=2, col='blue')
 **Can you calculate difference in counts along with a confidence
 interval for the difference? Try it!**
 
-# Overdisperson in Count Models
+# 7 Overdisperson in Count Models
 
 The data comprises Amici Curiae filed in the Supreme Court.
 
@@ -239,7 +257,7 @@ summary(amici)
     ##  3rd Qu.: 1.000   3rd Qu.:79.00   3rd Qu.:1.0000  
     ##  Max.   :53.000   Max.   :85.00   Max.   :1.0000
 
-## Poisson
+## 7.1 Poisson
 
 ``` r
 # Poisson Regression
@@ -273,7 +291,7 @@ summary(amici.poisson)
     ## 
     ## Number of Fisher Scoring iterations: 6
 
-## Is there Overdispersion?
+## 7.2 Is there Overdispersion?
 
 Overdispersion occurs when the observed variance is higher than the
 variance of a theoretical model. For Poisson models, variance increases
@@ -314,7 +332,7 @@ check_overdispersion(amici.poisson)
 
     ## Overdispersion detected.
 
-## Negative Binomial
+## 7.3 Negative Binomial
 
 ``` r
 # Negative Binomial
@@ -360,7 +378,7 @@ summary(amici.NB)
 
     ## [1] 3.896243
 
-## Compare Fitted Values from Poisson against Negative Binomial
+## 7.4 Compare Fitted Values from Poisson against Negative Binomial
 
 ``` r
 par(mar=c(4,4,2,2))
