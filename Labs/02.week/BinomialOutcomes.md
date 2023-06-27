@@ -26,8 +26,9 @@ Constanza F. Schibber
 - [7 First Differences: Plotting predicted probabilities for men and
   women, and first difference (Monte Carlo
   simulation)](#7-first-differences-plotting-predicted-probabilities-for-men-and-women-and-first-difference-monte-carlo-simulation)
-- [8 Marginal Change in Probability (for Status
-  Quo)](#8-marginal-change-in-probability-for-status-quo)
+- [8 Marginal Change in Probability](#8-marginal-change-in-probability)
+  - [8.1 Marginal Change in Probability, Status
+    Quo](#81-marginal-change-in-probability-status-quo)
 - [9 Marginal Change in Probability (for
   Income)](#9-marginal-change-in-probability-for-income)
 - [10 Plotting using `curve` instead of
@@ -255,6 +256,30 @@ respondents’ vote choice.
 
 # 5 Odds Ratio
 
+Odds of an event is the ratio of the probability of an event *happening*
+to the probability of the event *not happening*:
+$$Odds = \frac{p}{1-p}$$
+
+where $p$ is the probability of the event.
+
+Nicely, the odds ratio for failure is just the inverse of the odds ratio
+for success (symmetry).
+
+Some people prefer to think in terms of *odds* rather than probability:
+
+            $$Odd = \frac{p}{1-p} = \frac{p(y=1)}{p(y=0)}  \qquad\qquad\qquad p = \frac{Odd}{1+Odd}$$
+        where $0$ is obviously on the support $(0:\infty)$.
+
+This is essentially how logit works since:
+$$Odd = \log\left( \frac{p}{1-p} \right) = \beta_0 + \beta_1x_1 + \beta_2x_2$$
+
+So if $x_2$ is held constant, then a one-unit change in $x_1$ gives a
+$\beta_1$ change in the log-odds of success (or a $\exp(\beta_1)$ change
+in the odds).
+
+But this statement doesn’t really tell us much about the substance of an
+effect.
+
 ## 5.1 Odds Ratio for Status Quo covariate
 
 ``` r
@@ -423,10 +448,32 @@ for a respondent with secondary education.
 
 # 6 Predicted Probablities
 
-There are different ways of calculating predicted probabilities. In the
-next few weeks, we will learn how to use Monte Carlo simulations and the
-observed value approach. Now, we will use a simpler way to calculate
-quick predictions.
+For logit, *predicted probability* is,
+
+$$P(y_i=1) = \pi_i = \frac{1}{1+e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$$
+
+or,
+
+$$P(y_i=1) = \pi_i = \frac{e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}{1+e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$$
+
+where $\hat{\text{ }}$ indicates the ML estimate for the parameter.
+
+You can compute predicted probabilities “by hand” using either equation.
+You should memorize one.
+
+Notice that:
+
+- Predicted probabilities are *different* for every observation,
+  depending on the covariates.
+- You have to plug in values for every single $x$ variable, even the
+  controls.
+- Plot the predicted probabilities over the $x$ of interest to show
+  what’s really going on with the model.
+
+In `R`, there are different ways of calculating predicted probabilities.
+In the next few weeks, we will learn how to use Monte Carlo simulations
+and the observed value approach. Now, we will use a simpler way to
+calculate quick predictions.
 
 To make predictions, I set age and income to their means, and sex and
 education to their modes. I take a low value of status quo to be the 1st
@@ -630,12 +677,12 @@ head(sim.chile)
 ```
 
     ##      (Intercept) statusquo           age        income educationPS educationS
-    ## [1,]  0.45214782  3.393646  0.0052415921 -3.709880e-06  -0.3904157 -0.3654135
-    ## [2,]  0.54473499  3.208671  0.0052188315 -1.793735e-06  -0.7469735 -0.9101792
-    ## [3,]  0.10004652  3.252981  0.0150275635 -6.807186e-06  -0.3609428 -0.5199001
-    ## [4,] -0.07788026  3.054221  0.0192974390  1.622644e-06  -1.4052312 -0.7467067
-    ## [5,]  1.25765874  3.361536 -0.0024751483 -9.717309e-06  -1.1338977 -0.7994142
-    ## [6,]  0.76200657  3.136154  0.0008194611  2.062474e-06  -1.0494116 -0.5537460
+    ## [1,]   0.7384008  3.361602 -0.0024795434 -3.318182e-06  -0.6879244 -0.4970965
+    ## [2,]   1.1434271  3.149927 -0.0048434309 -4.234570e-06  -1.5278458 -0.9750862
+    ## [3,]   0.6935966  3.085490  0.0006390755 -4.311586e-06  -1.0614875 -0.4808965
+    ## [4,]   0.8762470  3.322413 -0.0004349890 -3.574839e-06  -1.1005150 -0.8456685
+    ## [5,]   0.2286898  3.259682  0.0073750188 -6.521720e-06  -0.6529343 -0.2579533
+    ## [6,]   0.8174816  3.486776  0.0056739990 -4.325962e-06  -1.7334030 -0.9668897
 
 ``` r
 summary(Chile.out)
@@ -683,19 +730,19 @@ summary(sim.chile)
 ```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.4441   Min.   :2.691   Min.   :-0.021533   Min.   :-1.168e-05  
-    ##  1st Qu.: 0.4594   1st Qu.:3.078   1st Qu.:-0.002803   1st Qu.:-4.225e-06  
-    ##  Median : 0.6963   Median :3.176   Median : 0.002572   Median :-2.414e-06  
-    ##  Mean   : 0.6902   Mean   :3.179   Mean   : 0.002432   Mean   :-2.368e-06  
-    ##  3rd Qu.: 0.9256   3rd Qu.:3.280   3rd Qu.: 0.007414   3rd Qu.:-4.968e-07  
-    ##  Max.   : 1.7647   Max.   :3.619   Max.   : 0.025715   Max.   : 5.675e-06  
-    ##   educationPS        educationS      
-    ##  Min.   :-2.1580   Min.   :-1.59149  
-    ##  1st Qu.:-1.2577   1st Qu.:-0.82949  
-    ##  Median :-1.0383   Median :-0.67129  
-    ##  Mean   :-1.0358   Mean   :-0.67307  
-    ##  3rd Qu.:-0.8126   3rd Qu.:-0.51282  
-    ##  Max.   :-0.0130   Max.   : 0.07379
+    ##  Min.   :-0.3075   Min.   :2.662   Min.   :-0.020264   Min.   :-1.177e-05  
+    ##  1st Qu.: 0.4806   1st Qu.:3.078   1st Qu.:-0.002760   1st Qu.:-4.493e-06  
+    ##  Median : 0.7290   Median :3.182   Median : 0.001583   Median :-2.484e-06  
+    ##  Mean   : 0.7237   Mean   :3.180   Mean   : 0.001867   Mean   :-2.462e-06  
+    ##  3rd Qu.: 0.9580   3rd Qu.:3.282   3rd Qu.: 0.006149   3rd Qu.:-6.571e-07  
+    ##  Max.   : 1.6671   Max.   :3.737   Max.   : 0.024212   Max.   : 6.430e-06  
+    ##   educationPS         educationS     
+    ##  Min.   :-2.12049   Min.   :-1.4235  
+    ##  1st Qu.:-1.29140   1st Qu.:-0.8519  
+    ##  Median :-1.03897   Median :-0.6848  
+    ##  Mean   :-1.04538   Mean   :-0.6806  
+    ##  3rd Qu.:-0.80700   3rd Qu.:-0.5106  
+    ##  Max.   : 0.08573   Max.   : 0.2534
 
 You can make a histogram of the simulated intercepts:
 
@@ -712,7 +759,7 @@ from the model output,
 sd(sim.chile[,1])
 ```
 
-    ## [1] 0.3581762
+    ## [1] 0.3519621
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
@@ -795,7 +842,25 @@ We will cover on Monte Carlo simulations and first differences on the
 next Lab + lecture. Check the lecture slides for the calculation of the
 standard error for the first differences!
 
-# 8 Marginal Change in Probability (for Status Quo)
+# 8 Marginal Change in Probability
+
+For logit, the *marginal change in probability* (or just *marginal
+effect*) of $x$ is the derivative of probability:
+
+$$\frac{\partial \pi_i}{\partial x_{ik}} = \frac{\partial}{\partial x_{ik}}\bigg(\frac{1}{1+e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}\bigg)$$
+
+$$ =\hat{\beta}_k \frac{e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}{(1+e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})})^2}$$
+
+where $\frac{e^{-\eta}}{(1+e^{-\eta})^2}$ is the Logistic PDF instead of
+the CDF.
+
+In `R` the Logistic Probability Density Function is given by `dlogis`.
+
+Notice that you have to plug in values for every single $x$ variable,
+even the controls. Probabilities *induce interaction and curvilinearity*
+since these quantities depend on all of the $x$ variables.
+
+## 8.1 Marginal Change in Probability, Status Quo
 
 I am using the values of `statusquo` rather than creating the values
 because I also want to calculate the average marginal effect and for
@@ -829,7 +894,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.1924325
+    ## [1] 0.1924449
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -894,7 +959,7 @@ marginal.change.income<-beta.income*(exp(-eta)/(1+exp(-eta))^2)
 mean(marginal.change.income) 
 ```
 
-    ## [1] -6.091185e-07
+    ## [1] -5.945602e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
@@ -952,7 +1017,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.2885747
+    ## [1] 0.2883714
 
 ``` r
 plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
