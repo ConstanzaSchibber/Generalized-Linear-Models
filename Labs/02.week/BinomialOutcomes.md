@@ -454,11 +454,11 @@ for a respondent with secondary education.
 
 For logit, *predicted probability* is,
 
-$$P(y_i=1) = \pi_i = \frac{1}{1+e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$$
+$P(y_i=1) = \pi_i = \frac{1}{1+e^{-(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$
 
 or,
 
-$$P(y_i=1) = \pi_i = \frac{e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}{1+e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$$
+$P(y_i=1) = \pi_i = \frac{e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}{1+e^{(\hat{\alpha} + \hat{\beta}_1 x_{i1} + \hat{\beta}_2 x_{i2} + ... + \hat{\beta}_k x_{ik})}}$
 
 where $\hat{\text{ }}$ indicates the ML estimate for the parameter.
 
@@ -680,13 +680,13 @@ sim.chile <- coef(sim(Chile.out, n = 1000))
 head(sim.chile)
 ```
 
-    ##      (Intercept) statusquo           age        income educationPS educationS
-    ## [1,]   0.3041870  3.031591  0.0125459383 -5.483845e-06  -0.6906823 -0.5168533
-    ## [2,]   0.3382963  3.168130  0.0115342054 -2.273373e-06  -0.3836626 -0.3781213
-    ## [3,]   0.9933610  3.352183 -0.0058507663 -5.145463e-06  -0.3621877 -0.7249585
-    ## [4,]   0.8150256  3.051098  0.0013632389 -4.161521e-06  -1.0034785 -0.4615601
-    ## [5,]   0.7533784  3.203885 -0.0007357276 -5.971068e-07  -1.2242559 -0.6666554
-    ## [6,]   0.4664298  3.145644  0.0129396782 -7.983413e-06  -0.4260628 -0.6294920
+    ##      (Intercept) statusquo          age        income educationPS educationS
+    ## [1,]   0.8461052  3.243148  0.004895294 -2.414281e-06  -1.3856031 -0.7037498
+    ## [2,]   0.2620542  3.153198  0.008365041 -1.090742e-06  -0.8026585 -0.2888620
+    ## [3,]   0.4673173  3.154859  0.008564236  8.905675e-07  -1.1801188 -0.8309914
+    ## [4,]   0.6728983  3.027277 -0.001459054 -5.960062e-07  -0.6543748 -0.5403103
+    ## [5,]   0.7714839  3.075492  0.004176502 -5.233798e-06  -0.9582917 -0.6234888
+    ## [6,]   1.0775863  3.234696 -0.006377367  9.766404e-07  -1.6575217 -0.9798216
 
 ``` r
 summary(Chile.out)
@@ -734,19 +734,19 @@ summary(sim.chile)
 ```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.4100   Min.   :2.697   Min.   :-0.024228   Min.   :-1.312e-05  
-    ##  1st Qu.: 0.4706   1st Qu.:3.092   1st Qu.:-0.002872   1st Qu.:-4.491e-06  
-    ##  Median : 0.7056   Median :3.189   Median : 0.001939   Median :-2.583e-06  
-    ##  Mean   : 0.7104   Mean   :3.189   Mean   : 0.002143   Mean   :-2.528e-06  
-    ##  3rd Qu.: 0.9632   3rd Qu.:3.290   3rd Qu.: 0.007245   3rd Qu.:-5.636e-07  
-    ##  Max.   : 1.9255   Max.   :3.668   Max.   : 0.024398   Max.   : 6.379e-06  
-    ##   educationPS        educationS      
-    ##  Min.   :-2.2739   Min.   :-1.37149  
-    ##  1st Qu.:-1.2679   1st Qu.:-0.82498  
-    ##  Median :-1.0319   Median :-0.66447  
-    ##  Mean   :-1.0323   Mean   :-0.66713  
-    ##  3rd Qu.:-0.8064   3rd Qu.:-0.49904  
-    ##  Max.   :-0.1310   Max.   : 0.04098
+    ##  Min.   :-0.4400   Min.   :2.649   Min.   :-0.021481   Min.   :-1.084e-05  
+    ##  1st Qu.: 0.4557   1st Qu.:3.089   1st Qu.:-0.002613   1st Qu.:-4.057e-06  
+    ##  Median : 0.6770   Median :3.183   Median : 0.002395   Median :-2.321e-06  
+    ##  Mean   : 0.6930   Mean   :3.185   Mean   : 0.002356   Mean   :-2.367e-06  
+    ##  3rd Qu.: 0.9382   3rd Qu.:3.283   3rd Qu.: 0.007272   3rd Qu.:-6.319e-07  
+    ##  Max.   : 1.7834   Max.   :3.706   Max.   : 0.023119   Max.   : 7.576e-06  
+    ##   educationPS        educationS     
+    ##  Min.   :-2.0580   Min.   :-1.5047  
+    ##  1st Qu.:-1.2523   1st Qu.:-0.8174  
+    ##  Median :-1.0237   Median :-0.6615  
+    ##  Mean   :-1.0271   Mean   :-0.6673  
+    ##  3rd Qu.:-0.7867   3rd Qu.:-0.5075  
+    ##  Max.   :-0.1170   Max.   : 0.1272
 
 You can make a histogram of the simulated intercepts:
 
@@ -763,7 +763,7 @@ from the model output,
 sd(sim.chile[,1])
 ```
 
-    ## [1] 0.3646288
+    ## [1] 0.3434194
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
@@ -898,7 +898,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.192475
+    ## [1] 0.1924114
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -964,7 +964,7 @@ marginal.change.income<-beta.income*(exp(-eta)/(1+exp(-eta))^2)
 mean(marginal.change.income) 
 ```
 
-    ## [1] -6.010087e-07
+    ## [1] -6.006561e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
@@ -1001,7 +1001,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.2885756
+    ## [1] 0.2881838
 
 ``` r
 plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
