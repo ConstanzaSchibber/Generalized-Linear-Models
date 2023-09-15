@@ -99,7 +99,8 @@ Then omit observations with missing data - Issue is that if you don’t
 omit missing the predicted values will have a different length than the
 data and it can cause problems. *We will cover in a few weeks how to
 handle missing values using multiple imputation.* Do not omit missing
-data in your own work!
+data when you conduct your own research work! Missing data can be (and
+most times is) a source of bias.
 
 ``` r
 Chile<-na.omit(Chile)
@@ -278,7 +279,10 @@ $\beta_1$ change in the log-odds of success (or a $\exp(\beta_1)$ change
 in the odds).
 
 But this statement doesn’t really tell us much about the substance of an
-effect.
+effect. In most social science research, you won’t see odds ratio
+interpretations, though sometimes you will which is important to
+understand how to interpret them. There are more compelling ways of
+presenting results (figures!).
 
 ## 5.1 Odds Ratio for Status Quo covariate
 
@@ -677,12 +681,12 @@ head(sim.chile)
 ```
 
     ##      (Intercept) statusquo           age        income educationPS educationS
-    ## [1,]   0.7384008  3.361602 -0.0024795434 -3.318182e-06  -0.6879244 -0.4970965
-    ## [2,]   1.1434271  3.149927 -0.0048434309 -4.234570e-06  -1.5278458 -0.9750862
-    ## [3,]   0.6935966  3.085490  0.0006390755 -4.311586e-06  -1.0614875 -0.4808965
-    ## [4,]   0.8762470  3.322413 -0.0004349890 -3.574839e-06  -1.1005150 -0.8456685
-    ## [5,]   0.2286898  3.259682  0.0073750188 -6.521720e-06  -0.6529343 -0.2579533
-    ## [6,]   0.8174816  3.486776  0.0056739990 -4.325962e-06  -1.7334030 -0.9668897
+    ## [1,]   0.3041870  3.031591  0.0125459383 -5.483845e-06  -0.6906823 -0.5168533
+    ## [2,]   0.3382963  3.168130  0.0115342054 -2.273373e-06  -0.3836626 -0.3781213
+    ## [3,]   0.9933610  3.352183 -0.0058507663 -5.145463e-06  -0.3621877 -0.7249585
+    ## [4,]   0.8150256  3.051098  0.0013632389 -4.161521e-06  -1.0034785 -0.4615601
+    ## [5,]   0.7533784  3.203885 -0.0007357276 -5.971068e-07  -1.2242559 -0.6666554
+    ## [6,]   0.4664298  3.145644  0.0129396782 -7.983413e-06  -0.4260628 -0.6294920
 
 ``` r
 summary(Chile.out)
@@ -730,19 +734,19 @@ summary(sim.chile)
 ```
 
     ##   (Intercept)        statusquo          age                income          
-    ##  Min.   :-0.3075   Min.   :2.662   Min.   :-0.020264   Min.   :-1.177e-05  
-    ##  1st Qu.: 0.4806   1st Qu.:3.078   1st Qu.:-0.002760   1st Qu.:-4.493e-06  
-    ##  Median : 0.7290   Median :3.182   Median : 0.001583   Median :-2.484e-06  
-    ##  Mean   : 0.7237   Mean   :3.180   Mean   : 0.001867   Mean   :-2.462e-06  
-    ##  3rd Qu.: 0.9580   3rd Qu.:3.282   3rd Qu.: 0.006149   3rd Qu.:-6.571e-07  
-    ##  Max.   : 1.6671   Max.   :3.737   Max.   : 0.024212   Max.   : 6.430e-06  
-    ##   educationPS         educationS     
-    ##  Min.   :-2.12049   Min.   :-1.4235  
-    ##  1st Qu.:-1.29140   1st Qu.:-0.8519  
-    ##  Median :-1.03897   Median :-0.6848  
-    ##  Mean   :-1.04538   Mean   :-0.6806  
-    ##  3rd Qu.:-0.80700   3rd Qu.:-0.5106  
-    ##  Max.   : 0.08573   Max.   : 0.2534
+    ##  Min.   :-0.4100   Min.   :2.697   Min.   :-0.024228   Min.   :-1.312e-05  
+    ##  1st Qu.: 0.4706   1st Qu.:3.092   1st Qu.:-0.002872   1st Qu.:-4.491e-06  
+    ##  Median : 0.7056   Median :3.189   Median : 0.001939   Median :-2.583e-06  
+    ##  Mean   : 0.7104   Mean   :3.189   Mean   : 0.002143   Mean   :-2.528e-06  
+    ##  3rd Qu.: 0.9632   3rd Qu.:3.290   3rd Qu.: 0.007245   3rd Qu.:-5.636e-07  
+    ##  Max.   : 1.9255   Max.   :3.668   Max.   : 0.024398   Max.   : 6.379e-06  
+    ##   educationPS        educationS      
+    ##  Min.   :-2.2739   Min.   :-1.37149  
+    ##  1st Qu.:-1.2679   1st Qu.:-0.82498  
+    ##  Median :-1.0319   Median :-0.66447  
+    ##  Mean   :-1.0323   Mean   :-0.66713  
+    ##  3rd Qu.:-0.8064   3rd Qu.:-0.49904  
+    ##  Max.   :-0.1310   Max.   : 0.04098
 
 You can make a histogram of the simulated intercepts:
 
@@ -759,7 +763,7 @@ from the model output,
 sd(sim.chile[,1])
 ```
 
-    ## [1] 0.3519621
+    ## [1] 0.3646288
 
 In essence, simulation allows us to account for uncertainty when
 calculating predictions.
@@ -894,7 +898,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.1924449
+    ## [1] 0.192475
 
 INTERPRETATION 1: The increase of the probability of voting in favor of
 the military regime, for a one unit increase in support for the status
@@ -927,7 +931,8 @@ lines(sq, apply(Marginal.change, 1, quantile, .95), lty = 2)
 
 **Note: My opinion is that, for nonlinear models, first differences
 figures are more easy to interpret and provide my substantive insights
-for readers than ME figures.**
+for readers than Marginal Effects figures like the one above. However,
+these figures are very common on research publications.**
 
 # 9 Marginal Change in Probability (for Income)
 
@@ -959,13 +964,13 @@ marginal.change.income<-beta.income*(exp(-eta)/(1+exp(-eta))^2)
 mean(marginal.change.income) 
 ```
 
-    ## [1] -5.945602e-07
+    ## [1] -6.010087e-07
 
 The marginal change is negative, thus, we observe a *decrease in
 probability*. It is also very small because a 1 unit increase is equal
 to 1 peso. We can calculate a marginal change for 10,000 pesos to
 provide a more substantive interpretation though the change is still
-very small.
+extremely very small.
 
 INTERPRETATION 1: The decrease of the probability of voting in favor of
 the military regime, for a 10,000 pesos increase in income, is 0.006.(on
@@ -975,27 +980,6 @@ INTERPRETATION 2 (the same, different words): As the respondent’s income
 increases by 10,000 pesos, the respondent’s probability of voting in
 favor of Pinochet decreases by 0.006, on average, after controlling for
 other covariates.
-
-Look at the figure below. The y-axis is within a very small range of
-values. The marginal change varies at different points of income. Above
-we were calculating the average marginal effect. Remember the equation
-from the lecture! The ME is non-linear.
-
-``` r
-#The SE produced via simulation captures the uncertainty in the regression coefficients and the PDF 
-sim.chile <- coef(sim(Chile.out, n = 10000))
-# Beta for status quo
-beta.income<-sim.chile[,'income']
-# Calculate ME
-Marginal.change<-beta.income*dlogis(x.income.1%*%t(sim.chile))
-#mean(Marginal.change) 
-plot(NULL, xlab="Income", ylab="Marginal Change in P(Support Military)", ylim=c(-0.000001, 0), xlim=c(min(na.omit(Chile$income)),max(na.omit(Chile$income))))
-lines(income, apply(Marginal.change, 1, quantile, .05), lty = 2)
-lines(income, apply(Marginal.change, 1, quantile, .5), lwd = 3)
-lines(income, apply(Marginal.change, 1, quantile, .95), lty = 2)
-```
-
-![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 # 10 Plotting using `curve` instead of `lines`
 
@@ -1017,7 +1001,7 @@ Marginal.change<-beta.sq*dlogis(x.sq.1%*%t(sim.chile))
 mean(Marginal.change) 
 ```
 
-    ## [1] 0.2883714
+    ## [1] 0.2885756
 
 ``` r
 plot(NULL, xlab="Support for the Status Quo", ylab="Marginal Change in P(Vote in Support of the Military Regime)", ylim=c(0,1), xlim=c(min(na.omit(Chile$statusquo)),max(na.omit(Chile$statusquo))))
@@ -1026,7 +1010,7 @@ curve(apply(beta.sq*dlogis(cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Ch
 curve(apply(beta.sq*dlogis(cbind(1, x, mean(na.omit(Chile$age)), mean(na.omit(Chile$income)), 0, 1)%*%t(sim.chile)), 1, quantile, .95), add=TRUE, lty=2)
 ```
 
-![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 # 11 Multinomial Logit
 
@@ -1118,7 +1102,7 @@ lines(sq, pF[,4], lwd=3, col="red", lty=1)
 lines(sq, pM[,4], lwd=3,  lty=3)
 ```
 
-![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](BinomialOutcomes_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 **Discussion:** What can we infer from this figure? What are we learning
 with this modeling strategy compared to the logit model?
