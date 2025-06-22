@@ -2,6 +2,12 @@
 
 Teaching material I developed for PhD level course on generalized linear modeling. I taught this graduate course at the University of Virginia and Michigan State University.
 
+[Syllabus UVA](constanzaschibber.github.io/pdfs/SyllabusMLE.pdf)
+
+[Syllabus MSU](constanzaschibber.github.io/pdfs/Schibber_PLS900.pdf)
+
+Selected Labs:
+
 [Law of Large Numbers & Central Limit Theorem](https://github.com/ConstanzaSchibber/Generalized-Linear-Models/blob/main/Labs/01.week/LLN_CLT.md)
 
 [Models for Binomial Outcomes](https://github.com/ConstanzaSchibber/Generalized-Linear-Models/blob/main/Labs/02.week/BinomialOutcomes.md)
