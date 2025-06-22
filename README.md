@@ -2,9 +2,9 @@
 
 Teaching material I developed for PhD level course on generalized linear modeling. I taught this graduate course at the University of Virginia and Michigan State University.
 
-[Syllabus UVA](constanzaschibber.github.io/pdfs/SyllabusMLE.pdf)
+[Syllabus UVA](https://constanzaschibber.github.io/pdfs/SyllabusMLE.pdf)
 
-[Syllabus MSU](constanzaschibber.github.io/pdfs/Schibber_PLS900.pdf)
+[Syllabus MSU](https://constanzaschibber.github.io/pdfs/Schibber_PLS900.pdf)
 
 Selected Labs:
 
